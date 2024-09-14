@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+    <form th:object="${customerForm}" th:action="@{/customers/create}" method="post">
+        <fieldset>
+            <legend th:text="#{label.tr.managecustomer.managecustomerMessage}"></legend>
+            <div class="info">
+                <p th:utext="#{label.tr.managecustomer.createFormMessage}"></p>
+            </div>
+            <div th:if="${#fields.hasErrors('*')}" class="error" id="customerForm.errors">
+                <ul>
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                </ul>
+            </div>
+            <p>
+                <label for="customerKana">
+                    <span th:text="#{label.tr.common.kana}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerKana" th:field="*{customerKana}" class="text"/>
+                &nbsp;(<span th:text="#{label.tr.managecustomer.fullKanaOnlyMessage}"></span>)
+            </p>
+            <p>
+                <label for="customerName">
+                    <span th:text="#{label.tr.common.name}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerName" th:field="*{customerName}" class="text"/>
+                &nbsp;(<span th:text="#{label.tr.managecustomer.fullOnlyMessage}"></span>)
+            </p>
+            <p>
+                <label for="customerBirthYear">
+                    <span th:text="#{label.tr.common.birthday}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <select th:field="*{customerBirthYear}" id="customerBirthYear">
+                    <option th:each="year : ${@birthYearLabelCodeList.labelCodes()}" th:value="${year.code()}" th:text="${year.label()}"></option>
+                </select>
+                <span th:text="#{label.tr.common.year}"></span>
+                <select th:field="*{customerBirthMonth}">
+                    <option th:each="month : ${@monthLabelCodeList.labelCodes()}" th:value="${month.code()}" th:text="${month.label()}"></option>
+                </select>
+                <span th:text="#{label.tr.common.month}"></span>
+                <select th:field="*{customerBirthDay}">
+                    <option th:each="day : ${@dayOfMonthLabelCodeList.labelCodes()}" th:value="${day.code()}" th:text="${day.label()}"></option>
+                </select>
+                <span th:text="#{label.tr.common.day}"></span>
+            </p>
+            <p>
+                <label for="customerJob">
+                    <span th:text="#{label.tr.common.job}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerJob" th:field="*{customerJob}" class="text"/>
+            </p>
+            <p>
+                <label for="customerMail">
+                    <span th:text="#{label.tr.common.email}"></span>
+                </label><br>
+                <input type="text" id="customerMail" th:field="*{customerMail}" class="text"/>
+            </p>
+            <p>
+                <label for="customerTel">
+                    <span th:text="#{label.tr.common.tel}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerTel" th:field="*{customerTel}" class="text"/>
+                &nbsp;(<span th:text="#{label.tr.managecustomer.halfTelOnlyMessage}"></span>)&nbsp;
+                <span th:text="#{label.tr.managecustomer.telExampleMessage}"></span>
+            </p>
+            <p>
+                <label for="customerPost">
+                    <span th:text="#{label.tr.common.zip}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerPost" th:field="*{customerPost}" class="text"/>
+                &nbsp;(<span th:text="#{label.tr.managecustomer.halfPasswordOnlyMessage}"></span>)&nbsp;
+                <span th:text="#{label.tr.managecustomer.zipExampleMessage}"></span>
+            </p>
+            <p>
+                <label for="customerAdd">
+                    <span th:text="#{label.tr.common.address}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="text" id="customerAdd" th:field="*{customerAdd}" class="text"/>
+            </p>
+            <p>
+                <label for="customerPass">
+                    <span th:text="#{label.tr.common.password}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="password" id="customerPass" th:field="*{customerPass}" class="text"/>
+                &nbsp;(<span th:text="#{label.tr.managecustomer.halfPasswordOnlyMessage}"></span>)
+            </p>
+            <p>
+                <label for="customerPassConfirm">
+                    <span th:text="#{label.tr.common.passwordConfirm}"></span>
+                    (<span th:text="#{label.tr.common.required}"></span>)
+                </label><br>
+                <input type="password" id="customerPassConfirm" th:field="*{customerPassConfirm}" class="text"/>
+            </p>
+            <p>
+                <button id="confirmBtn" name="confirm" type="submit">
+                    <span th:text="#{label.tr.common.confirm}"></span>
+                </button>
+                <button id="resetBtn" type="reset">
+                    <span th:text="#{label.tr.common.reset}"></span>
+                </button>
+            </p>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

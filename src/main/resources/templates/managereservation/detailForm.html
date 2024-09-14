@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+
+    <div>
+        <div>
+            <div>
+                <div>
+                    <h1 id="screenName">
+                        <span th:text="#{label.tr.managereservation.manageReservationShowScreenTitleMessage}"></span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="info">
+                <span th:utext="#{label.tr.managereservation.manageReservationShowScreenFlowMessage}"></span>
+            </div>
+            <br/>
+
+            <p>
+                <span th:utext="#{label.tr.managereservation.manageReservationShowMessage}"></span>
+            </p>
+
+            <div th:if="${output.reserve.transfer == '0'}">
+                <br/>
+                <span th:utext="#{label.tr.managereservation.paymentReminderMessage}"></span>
+            </div>
+
+            <div th:if="${output.reserve.transfer == '1'}">
+                <br/>
+                <span th:utext="#{label.tr.managereservation.paymentNoCancelMessage}"></span>
+                <br/>
+            </div>
+
+            <br/>
+            <span th:text="#{label.tr.common.pdfdownloadMessage}"></span>
+            <br/>
+
+            <div>
+                <form th:action="@{/reservations/{reserveNo}/pdf(reserveNo=${output.reserve.reserveNo})}" method="get">
+                    <button id="downloadBtn" type="submit">
+                        <span th:text="#{label.tr.common.downloadpdfBtnMessage}"></span>
+                    </button>
+                </form>
+            </div>
+
+            <div th:if="${output.reserve.transfer == '0'}"
+                 th:with="paymentTimeLimit=${T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(output.paymentTimeLimit)}">
+                <div th:replace="~{common/fragment/paymentTable :: paymentTableFragment(paymentTimeLimit=${paymentTimeLimit})}"></div>
+                <br/>
+                <hr/>
+            </div>
+            <div th:replace="~{common/fragment/reserveTable :: reserveTableFragment(reserve=${output.reserve})}"></div>
+            <br/>
+            <hr/>
+            <div th:replace="~{common/fragment/customerTable :: customerTableFragment(customer=${output.customer})}"></div>
+            <br/>
+            <hr/>
+            <div th:replace="~{common/fragment/priceTable :: priceTableFragment(priceCalculateOutput=${output.priceCalculateOutput})}"></div>
+            <br/>
+            <hr/>
+
+            <table>
+                <caption>
+                    <span th:text="#{label.tr.common.specialNotes}"></span>
+                </caption>
+                <tr>
+                    <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+                    <td th:text="${output.reserve.remarks}"></td>
+                </tr>
+            </table>
+            <br/><br/>
+
+            <div class="span-12">
+                <table>
+                    <tr>
+                        <td>
+                            <form th:action="@{/reservations/me}" method="get">
+                                <button id="backToListBtn" name="backTolist" type="submit">
+                                    <span th:text="#{label.tr.managereservation.returnToListScreenBtnMessage}"></span>
+                                </button>
+                            </form>
+                        </td>
+
+                        <td th:if="${!output.limitExceeding}">
+                            <div th:if="${output.reserve.transfer == '0'}">
+                                <form th:action="@{/reservations/{reserveNo}/update(reserveNo=${output.reserve.reserveNo})}"
+                                      method="get">
+                                    <button id="changeBtn" name="form" type="submit">
+                                        <span th:text="#{label.tr.managereservation.changeReservationBtnMessage}"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+
+                        <td th:if="${!output.limitExceeding}">
+                            <div th:if="${output.reserve.transfer == '0'}">
+                                <form th:action="@{/reservations/{reserveNo}/cancel(reserveNo=${output.reserve.reserveNo})}"
+                                      method="get">
+                                    <button id="cancelBtn" type="submit">
+                                        <span th:text="#{label.tr.managereservation.cancelReservationBtnMessage}"></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/><br/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+
+    <h2 id="screenName">
+        <span th:text="#{label.tr.searchtour.searchTourMessage}"></span>
+    </h2>
+
+    <div class="info">
+        <p th:utext="#{label.tr.searchtour.searchTourFlowMessage}"></p>
+        <p th:utext="#{label.tr.searchtour.searchTourInstructionsMessage}"></p>
+    </div>
+
+    <div class="span-24 last">
+        <form th:action="@{/tours}" th:object="${searchTourForm}" method="get" class="inline">
+            <fieldset>
+                <legend>
+                    <span th:text="#{label.tr.searchtour.SearchCriteriaTourMessage}"></span>
+                </legend>
+
+                <div th:if="${#fields.hasErrors('*')}" class="error">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" id="searchTourForm.errors"></li>
+                    </ul>
+                </div>
+
+                <div class="span-14">
+                    <label for="depYear" th:text="#{label.tr.common.depDate}"></label>
+                    <select th:field="*{depYear}" id="depYear">
+                        <option th:each="year : ${@depYearLabelCodeList.labelCodes()}" th:value="${year.code()}"
+                                th:text="${year.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.year}"></span>
+
+                    <select th:field="*{depMonth}">
+                        <option th:each="month : ${@monthLabelCodeList.labelCodes()}" th:value="${month.code()}"
+                                th:text="${month.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.month}"></span>
+
+                    <select th:field="*{depDay}">
+                        <option th:each="day : ${@dayOfMonthLabelCodeList.labelCodes()}" th:value="${day.code()}"
+                                th:text="${day.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.day}"></span>
+
+                    <div>
+                        (<span th:text="#{label.tr.searchtour.depDateRestrictMessage}"></span>)
+                    </div>
+                </div>
+
+                <div class="span-8 last">
+                    <label for="tourDays" th:text="#{label.tr.common.tourDays}"></label>
+                    <select th:field="*{tourDays}" id="tourDays">
+                        <option th:each="days : ${@tourDaysLabelCodeList.labelCodes()}" th:value="${days.code()}"
+                                th:text="${days.label()}"></option>
+                    </select>
+                </div>
+
+                <div class="span-14">
+                    <label for="depCode" th:text="#{label.tr.common.depPlace}"></label>
+                    <select th:field="*{depCode}" id="depCode">
+                        <option th:text="#{label.tr.searchtour.placeMessage}" value=""></option>
+                        <option th:each="place : ${@prefectureLabelCodeList.labelCodes()}" th:value="${place.code()}"
+                                th:text="${place.label()}"></option>
+                    </select>
+                </div>
+
+                <div class="span-8 last">
+                    <label for="arrCode" th:text="#{label.tr.common.arrPlace}"></label>
+                    <select th:field="*{arrCode}" id="arrCode">
+                        <option th:text="#{label.tr.searchtour.placeMessage}" value=""></option>
+                        <option th:each="place : ${@prefectureLabelCodeList.labelCodes()}" th:value="${place.code()}"
+                                th:text="${place.label()}"></option>
+                    </select>
+                </div>
+
+                <div class="span-14">
+                    <label for="adultCount" th:text="#{label.tr.common.persons}"></label>
+                    <span th:text="#{label.tr.common.adult}"></span>
+                    <select th:field="*{adultCount}" id="adultCount">
+                        <option th:each="count : ${@adultCountLabelCodeList.labelCodes()}" th:value="${count.code()}"
+                                th:text="${count.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.person}"></span>
+                    &nbsp;&nbsp;
+                    <span th:text="#{label.tr.common.child}"></span>
+                    <select th:field="*{childCount}">
+                        <option th:each="count : ${@childCountLabelCodeList.labelCodes()}" th:value="${count.code()}"
+                                th:text="${count.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.person}"></span>
+
+                    <div>
+                        (<span th:text="#{label.tr.searchtour.personsRestrictMessage}"></span>)
+                    </div>
+                </div>
+
+                <div class="span-8 last">
+                    <label for="basePrice" th:text="#{label.tr.common.basePrice}"></label>
+                    <select th:field="*{basePrice}" id="basePrice">
+                        <option th:each="price : ${@basePriceLabelCodeList.labelCodes()}" th:value="${price.code()}"
+                                th:text="${price.label()}"></option>
+                    </select>
+                </div>
+
+                <div class="span-24 last">
+                    <button id="searchBtn" type="submit">
+                        <span th:text="#{label.tr.common.search}"></span>
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <hr>
+
+    <div th:if="${page != null}">
+        <p class="notice">
+            <span th:text="#{label.tr.searchtour.resultCountMessage(${page.totalElements})}"></span>
+        </p>
+
+        <div th:replace="~{common/fragment/pagination :: pagination(page=${page}, pageLinkMaxDispNum=5)}"></div>
+
+        <table id="toursTable">
+            <caption>
+                <span th:text="#{label.tr.searchtour.searchTourResultMessage}"></span>
+            </caption>
+            <thead>
+            <tr>
+                <th><span th:text="#{label.tr.common.idx}"></span></th>
+                <th><span th:text="#{label.tr.common.tourName}"></span></th>
+                <th><span th:text="#{label.tr.common.depDate}"></span></th>
+                <th><span th:text="#{label.tr.common.tourDays}"></span></th>
+                <th><span th:text="#{label.tr.common.depPlace}"></span></th>
+                <th><span th:text="#{label.tr.common.arrPlace}"></span></th>
+                <th><span th:text="#{label.tr.common.basePrice}"></span></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="tourInfo, rowStat : ${page.content}">
+                <td th:text="${(page.number * page.size) + rowStat.index + 1}"></td>
+                <td th:with="query=${T(org.terasoluna.tourreservation.common.QueryStringEncoder).encode(searchTourForm)}">
+                    <a th:href="@{${'/tours/{tourCode}/reserve?' + query}(form=true,page=${page.number}, size=${page.size}, tourCode=${tourInfo.tourCode})}"
+                       th:text="${tourInfo.tourName}"
+                       sec:authorize="hasRole('USER')">
+                    </a>
+                    <a th:href="@{${'/tours/{tourCode}?' + query}(form=true,page=${page.number}, size=${page.size}, tourCode=${tourInfo.tourCode})}"
+                       th:text="${tourInfo.tourName}"
+                       sec:authorize="!hasRole('USER')">
+                    </a>
+                </td>
+                <td th:with="datePattern=#{label.tr.common.datePattern}"
+                    th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(tourInfo.depDay), datePattern)}"></td>
+                <td th:text="${tourInfo.tourDays}"></td>
+                <td th:text="${tourInfo.departure.depName}"></td>
+                <td th:text="${tourInfo.arrival.arrName}"></td>
+                <td th:with="currencyPattern=#{label.tr.common.currencyPattern}"
+                    th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(tourInfo.basePrice, T(java.util.Locale).JAPAN)}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:replace="~{common/fragment/pagination :: pagination(page=${page}, pageLinkMaxDispNum=5)}"></div>
+    </div>
+</div>
+
+</body>
+</html>

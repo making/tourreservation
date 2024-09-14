@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="customerTableFragment(customerForm)">
+    <table id="customerTable">
+        <caption>
+            <span th:text="#{label.tr.common.notLoginMessage}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.common.kana}"></span></td>
+            <td th:text="${customerForm.customerKana}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.name}"></span></td>
+            <td th:text="${customerForm.customerName}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.birthday}"></span></td>
+            <td>
+                <span th:text="${#temporals.format(customerForm.birthDay,'uuuu年MM月dd日')}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.job}"></span></td>
+            <td th:text="${customerForm.customerJob}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.email}"></span></td>
+            <td th:text="${customerForm.customerMail}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.tel}"></span></td>
+            <td th:text="${customerForm.customerTel}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.zip}"></span></td>
+            <td th:text="${customerForm.customerPost}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.address}"></span></td>
+            <td th:text="${customerForm.customerAdd}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.password}"></span></td>
+            <td>********</td>
+        </tr>
+    </table>
+</div>
+</html>

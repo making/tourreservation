@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title,body)" lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" th:href="@{/vendor/blueprint-1.0/950px/screen.css}">
+    <link rel="stylesheet" th:href="@{/vendor/blueprint-1.0/plugins/fancy-type/screen.css}">
+    <link rel="stylesheet" th:href="@{/app/css/styles.css}">
+    <title th:replace="${title}" th:text="#{title.common}">ツアー予約システム</title>
+</head>
+<body>
+<div class="container">
+    <div id="header" th:replace="~{layout/header :: header}"></div>
+    <div id="body" th:replace="${body}"></div>
+    <div id="footer" th:replace="~{layout/footer :: footer}"></div>
+</div>
+</body>
+</html>

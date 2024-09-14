@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="resultMessages(resultMessages)">
+    <div th:if="${!#strings.isEmpty(resultMessages)}" th:class="${resultMessages.type()}">
+        <ul>
+            <li th:each="message : ${resultMessages.resolveMessages(@messageSource)}" th:text="${message}"></li>
+        </ul>
+    </div>
+</div>
+</html>

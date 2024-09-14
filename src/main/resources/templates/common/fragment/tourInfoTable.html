@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="tourInfoTableFragment(tourInfo)">
+    <table id="tourInfoTable">
+        <caption>
+            <span th:text="#{label.tr.searchtour.tourDetailCaptionMessage}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.tourname}"></span></td>
+            <td colspan="3" th:text="${tourInfo.tourName}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.depDay}"></span></td>
+            <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(tourInfo.depDay), 'uuuu年MM月dd日')}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.tourDays}"></span></td>
+            <td th:text="${tourInfo.tourDays}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.depName}"></span></td>
+            <td th:text="${tourInfo.departure.depName}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.arrName}"></span></td>
+            <td th:text="${tourInfo.arrival.arrName}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.conductor}"></span></td>
+            <td colspan="3" th:text="${@existenceLabelCodeList.getLabelFromCode(tourInfo.conductor)}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.accomName}"></span></td>
+            <td th:text="${tourInfo.accommodation.accomName}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.accomTel}"></span></td>
+            <td th:text="${tourInfo.accommodation.accomTel}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.tourAbs}"></span></td>
+            <td colspan="3" th:text="${tourInfo.tourAbs}"></td>
+        </tr>
+    </table>
+</div>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="reserveTableFragment(reserve)">
+    <table id="reserveTable">
+        <caption>
+            <span th:text="#{label.tr.searchtour.tourDetailCaptionMessage}"></span>
+        </caption>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.reserveNo}"></span></td>
+            <td th:text="${reserve.reserveNo}"></td>
+            <td><span th:text="#{label.tr.searchtour.reserveDate}"></span></td>
+            <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(reserve.reservedDay), 'uuuu年MM月dd日')}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.tourname}"></span></td>
+            <td colspan="3" th:text="${reserve.tourInfo.tourName}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.depDay}"></span></td>
+            <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(reserve.tourInfo.depDay), 'uuuu年MM月dd日')}"></td>
+            <td><span th:text="#{label.tr.searchtour.tourDays}"></span></td>
+            <td th:text="${reserve.tourInfo.tourDays}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.depName}"></span></td>
+            <td th:text="${reserve.tourInfo.departure.depName}"></td>
+            <td><span th:text="#{label.tr.searchtour.arrName}"></span></td>
+            <td th:text="${reserve.tourInfo.arrival.arrName}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.conductor}"></span></td>
+            <td colspan="3" th:text="${@existenceLabelCodeList.getLabelFromCode(reserve.tourInfo.conductor)}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.accomName}"></span></td>
+            <td th:text="${reserve.tourInfo.accommodation.accomName}"></td>
+            <td><span th:text="#{label.tr.searchtour.accomTel}"></span></td>
+            <td th:text="${reserve.tourInfo.accommodation.accomTel}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.tourAbs}"></span></td>
+            <td colspan="3" th:text="${reserve.tourInfo.tourAbs}"></td>
+        </tr>
+    </table>
+</div>
+</html>

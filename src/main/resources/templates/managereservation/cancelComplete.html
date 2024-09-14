@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <h2 id="screenName">
+        <span th:text="#{label.tr.managereservation.aftercancelScreenTitleMessage}"></span>
+    </h2>
+
+    <div class="success">
+        <span th:utext="#{label.tr.managereservation.aftercancelScreenFlowMessage}"></span>
+    </div>
+
+    <br/>
+    <span th:text="#{label.tr.managereservation.aftercancelScreenMessage(${reserveNo})}"></span>
+    <br/>
+
+    <div class="span-8">
+        <table>
+            <tr>
+                <td>
+                    <form th:action="@{/reservations/me}" method="get">
+                        <button id="returnToListScreenBtn" type="submit">
+                            <span th:text="#{label.tr.managereservation.returnToListScreenBtnMessage}"></span>
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{'/'}" method="get">
+                        <button id="gotoMenuBtn" type="submit">
+                            <span th:text="#{label.tr.common.gotoMenuMessage}"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <p><br/></p>
+    <p><br/></p>
+</div>
+</body>
+</html>

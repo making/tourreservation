@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <h2 id="screenName">
+        <span th:text="#{label.tr.searchtour.reserveScreenTitleMessage}"></span>
+    </h2>
+
+    <div class="success">
+        <span th:utext="#{label.tr.searchtour.reserveScreenFlowMessage}"></span>
+    </div>
+    <br/>
+
+    <p>
+        <span th:utext="#{label.tr.searchtour.searchtourReservePdfMessage}"></span>
+    </p>
+
+    <p>
+        <span th:utext="#{label.tr.searchtour.searchtourReserveDetailMessage}"></span>
+    </p>
+
+    <form th:action="@{/reservations/{reserveNo}/pdf(reserveNo=${output.reserve.reserveNo})}" method="get">
+        <button type="submit">
+            <span th:text="#{label.tr.common.downloadpdfBtnMessage}"></span>
+        </button>
+    </form>
+
+    <div th:replace="~{common/fragment/paymentTable :: paymentTableFragment(paymentTimeLimit=${output.paymentTimeLimit})}"></div>
+    <br/>
+    <hr/>
+    <div th:replace="~{common/fragment/reserveTable :: reserveTableFragment(reserve=${output.reserve})}"></div>
+    <br/>
+    <hr/>
+    <div th:replace="~{common/fragment/customerTable :: customerTableFragment(customer=${output.customer})}"></div>
+    <br/>
+    <hr/>
+    <div th:replace="~{common/fragment/priceTable :: priceTableFragment(priceCalculateOutput=${output.priceCalculateOutput})}"></div>
+    <br/>
+    <hr/>
+
+    <table>
+        <caption>
+            <span th:text="#{label.tr.common.specialNotes}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+            <td th:text="${output.reserve.remarks}"></td>
+        </tr>
+    </table>
+    <br/>
+
+    <div>
+        <form th:action="@{/tours}" method="get">
+            <button type="submit">
+                <span th:text="#{label.tr.searchtour.goTourSearchScreenMessage}"></span>
+            </button>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <button type="submit">
+                <span th:text="#{label.tr.common.gotoMenuMessage}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

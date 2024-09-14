@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="priceTableFragment(priceCalculateOutput)">
+    <table id="priceTable">
+        <caption>
+            <span th:text="#{label.tr.searchtour.statementOfCharges}"></span>
+        </caption>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.classificationOnAge}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.unitPrice}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.noOfPeople}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.charge}"></span></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.adult}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(priceCalculateOutput.adultUnitPrice, T(java.util.Locale).JAPAN)}"></td>
+            <td th:text="${priceCalculateOutput.adultCount}"></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(priceCalculateOutput.adultPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.child}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(priceCalculateOutput.childUnitPrice, T(java.util.Locale).JAPAN)}"></td>
+            <td th:text="${priceCalculateOutput.childCount}"></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(priceCalculateOutput.childPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+
+        <tr>
+            <td colspan="3"><span th:text="#{label.tr.searchtour.sumPrice}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(priceCalculateOutput.sumPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+    </table>
+</div>
+</html>

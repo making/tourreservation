@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div class="success">
+        <p th:utext="#{label.tr.managecustomer.createCompleteMessage(${customer.customerCode})}"></p>
+    </div>
+    <form th:action="@{/}" method="get">
+        <button id="goToMenuBtn" type="submit">
+            <span th:text="#{label.tr.common.gotoMenuMessage}"></span>
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

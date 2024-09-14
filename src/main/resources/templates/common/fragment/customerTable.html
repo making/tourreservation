@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="customerTableFragment(customer)">
+    <table id="customerTable">
+        <caption>
+            <span th:text="#{label.tr.searchtour.representative}"></span>
+        </caption>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerCode}"></span></td>
+            <td id="customer-id-td" colspan="3" th:text="${customer.customerCode}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerKana}"></span></td>
+            <td colspan="3" th:text="${customer.customerKana}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerName}"></span></td>
+            <td colspan="3" th:text="${customer.customerName}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerBirth}"></span></td>
+            <td colspan="3">
+                <span th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(customer.customerBirth),'uuuu年MM月dd日')}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerJob}"></span></td>
+            <td colspan="3" th:text="${customer.customerJob}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><span th:text="#{label.tr.searchtour.customerMail}"></span></td>
+            <td colspan="3" th:text="${customer.customerMail}"></td>
+        </tr>
+        <tr>
+            <td rowspan="3"><span th:text="#{label.tr.searchtour.customerContactInfo}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.customerTell}"></span></td>
+            <td colspan="3" th:text="${customer.customerTel}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.customerPost}"></span></td>
+            <td colspan="3" th:text="${customer.customerPost}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.customerAdd}"></span></td>
+            <td colspan="3" th:text="${customer.customerAdd}"></td>
+        </tr>
+    </table>
+</div>
+</html>

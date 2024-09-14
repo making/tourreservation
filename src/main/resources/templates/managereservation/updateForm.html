@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="screenName">
+        <span th:text="#{label.tr.managereservation.manageReservationEditScreenTitle}"></span>
+    </h2>
+
+    <div class="info">
+        <span th:utext="#{label.tr.managereservation.manageReservationEditFlowMessage}"></span>
+    </div>
+
+    <span th:utext="#{label.tr.managereservation.manageReservationEditMessage}"></span>
+
+    <form th:action="@{/reservations/{reserveNo}/update(reserveNo=${reserve.reserveNo})}" method="post"
+          th:object="${manageReservationForm}">
+        <table>
+            <caption>
+                <span th:text="#{label.tr.searchtour.tourDetailCaptionMessage}"></span>
+            </caption>
+            <tr>
+                <th><span th:text="#{label.tr.searchtour.reserveNo}"></span></th>
+                <td th:text="${reserve.reserveNo}"></td>
+                <th><span th:text="#{label.tr.searchtour.reserveDate}"></span></th>
+                <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(reserve.reservedDay), 'uuuu年MM月dd日')}"></td>
+            </tr>
+            <tr>
+                <th><span th:text="#{label.tr.searchtour.tourname}"></span></th>
+                <td colspan="3" th:text="${reserve.tourInfo.tourName}"></td>
+            </tr>
+            <tr>
+                <th><span th:text="#{label.tr.searchtour.depDay}"></span></th>
+                <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(reserve.tourInfo.depDay), 'uuuu年MM月dd日')}"></td>
+                <th><span th:text="#{label.tr.searchtour.tourDays}"></span></th>
+                <td th:text="${reserve.tourInfo.tourDays}"></td>
+            </tr>
+            <tr>
+                <th><span th:text="#{label.tr.searchtour.depName}"></span></th>
+                <td th:text="${reserve.tourInfo.departure.depName}"></td>
+                <th><span th:text="#{label.tr.searchtour.arrName}"></span></th>
+                <td th:text="${reserve.tourInfo.arrival.arrName}"></td>
+            </tr>
+            <tr>
+                <th><span th:text="#{label.tr.common.persons}"></span></th>
+                <td colspan="3">
+                    <span th:text="#{label.tr.common.adult}"></span>
+                    <select th:field="*{adultCount}" id="adultCount">
+                        <option th:each="count : ${@adultCountLabelCodeList.labelCodes()}" th:value="${count.code()}"
+                                th:text="${count.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.person}"></span>
+                    <span th:text="#{label.tr.common.child}"></span>
+                    <select th:field="*{childCount}">
+                        <option th:each="count : ${@childCountLabelCodeList.labelCodes()}" th:value="${count.code()}"
+                                th:text="${count.label()}"></option>
+                    </select>
+                    <span th:text="#{label.tr.common.person}"></span>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <caption>
+                <span th:text="#{label.tr.common.specialNotes}"></span>
+            </caption>
+            <tr>
+                <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+                <td colspan="3" th:text="${reserve.remarks}"></td>
+            </tr>
+        </table>
+        <br/>
+
+        <div class="span-9">
+            <table>
+                <tr>
+                    <td>
+                        <div class="button">
+                            <button id="backToListBtn" name="backTolist" type="submit">
+                                <span th:text="#{label.tr.managereservation.returnToListScreenBtnMessage}"></span>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="button">
+                            <button id="confirmBtn" name="confirm" type="submit">
+                                <span th:text="#{label.tr.managereservation.confirmEditBtnMessage}"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      lang="ja">
+<div th:fragment="topFragment">
+    <div sec:authorize="!hasRole('USER')">
+        <p id="messagesArea" class="box">
+            <span th:text="#{label.tr.common.notLoginMessage}"></span>
+        </p>
+    </div>
+    <div sec:authorize="hasRole('USER')">
+        <form th:action="@{/logout}" method="post" class="inline">
+            <button id="logoutBtn" name="logout">
+                <span th:text="#{label.tr.common.logout}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+</html>

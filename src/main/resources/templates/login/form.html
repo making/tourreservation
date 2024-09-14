@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+    <div th:if="${param.error}" class="error">
+        <span id="loginError" th:text="${error}"></span>
+    </div>
+    <form th:action="@{/login}" method="post">
+        <fieldset>
+            <legend>
+                <span th:text="#{label.tr.login.loginFormMessage}"></span>
+            </legend>
+            <p>
+                <label for="username">
+                    <span th:text="#{label.tr.common.userId}"></span>
+                </label><br>
+                <input type="text" class="text" id="username" name="username">
+            </p>
+            <p>
+                <label for="password">
+                    <span th:text="#{label.tr.common.password}"></span>
+                </label><br>
+                <input type="password" class="text" id="password" name="password">
+            </p>
+
+            <p>
+                <input type="hidden" name="redirectTo" th:value="${param.redirectTo}"/>
+                <button id="loginBtn" type="submit">
+                    <span th:text="#{label.tr.common.login}"></span>
+                </button>
+                <button id="resetBtn" type="reset">
+                    <span th:text="#{label.tr.common.reset}"></span>
+                </button>
+            </p>
+        </fieldset>
+    </form>
+
+    <hr>
+
+    <p>
+        <span th:text="#{label.tr.login.notCustmerMessage}"></span>
+    </p>
+
+    <form th:action="@{/customers/create}" method="get">
+        <button id="customerRegisterBtn" name="form">
+            <span th:text="#{label.tr.menu.customerRegisterBtnMessage}"></span>
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

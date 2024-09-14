@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+
+    <h2 id="screenName">
+        <span th:text="#{label.tr.searchtour.titleDetailScreenMessage}"></span>
+    </h2>
+
+    <div class="info">
+        <span th:utext="#{label.tr.searchtour.detailScreenFlowMessage}"></span>
+    </div>
+
+    <div sec:authorize="!hasRole('USER')">
+        <p>
+            <span th:text="#{label.tr.searchtour.loginToReserveMessage}"></span>
+        </p>
+    </div>
+
+    <div sec:authorize="hasRole('USER')">
+        <p>
+            <span th:utext="#{label.tr.searchtour.pressReserveBtnMessage}"></span>
+        </p>
+    </div>
+
+    <div class="span-24" th:object="${reserveTourForm}">
+        <div th:replace="~{common/fragment/resultMessages :: resultMessages(resultMessages=${resultMessages})}"></div>
+        <div th:if="${#fields.hasErrors('*')}" class="error" id="reserveTourForm.errors">
+            <ul>
+                <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+            </ul>
+        </div>
+        <div th:replace="~{common/fragment/tourInfoTable :: tourInfoTableFragment(tourInfo=${output.tourInfo})}"></div>
+        <br>
+
+        <div sec:authorize="hasRole('USER')">
+            <br>
+            <div th:replace="~{common/fragment/customerTable :: customerTableFragment(customer=${output.customer})}"></div>
+        </div>
+
+        <br>
+        <div th:replace="~{common/fragment/priceTable :: priceTableFragment(priceCalculateOutput=${output.priceCalculateOutput})}"></div>
+    </div>
+
+    <div sec:authorize="hasRole('USER')">
+        <br>
+        <form th:action="@{reserve}" th:object="${reserveTourForm}" method="post">
+            <table>
+                <caption>
+                    <span th:text="#{label.tr.common.specialNotes}"></span>
+                </caption>
+                <tr>
+                    <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+                    <td>
+                        <textarea th:field="*{remarks}"></textarea><br>
+                        <span th:text="#{label.tr.searchtour.lessThanEightyCharsMessage}"></span><br>
+                        <span th:text="#{label.tr.searchtour.opinionSuggestionMessage}"></span>
+                    </td>
+                </tr>
+            </table>
+
+            <input type="hidden" th:field="*{childCount}"/>
+            <input type="hidden" th:field="*{adultCount}"/>
+            <input type="hidden" name="page" th:value="${param.page}"/>
+            <input type="hidden" name="size" th:value="${param.size}"/>
+
+            <button id="confirmBtn" name="confirm" type="submit">
+                <span th:text="#{label.tr.common.confirm}"></span>
+            </button>
+        </form>
+
+        <form th:action="@{/tours}" method="get" class="inline">
+            <input type="hidden" name="page" th:value="${param.page}"/>
+            <input type="hidden" name="size" th:value="${param.size}"/>
+            <button th:id="${'backToToursBtn'}" type="submit">
+                <span th:text="#{label.tr.common.goBackMessage}"></span>
+            </button>
+        </form>
+    </div>
+
+    <div sec:authorize="!hasRole('USER')">
+        <form th:action="@{/login}" method="get" class="inline">
+            <input type="hidden" name="redirectTo"
+                   th:with="query=${T(org.terasoluna.tourreservation.common.QueryStringEncoder).encode(reserveTourForm)}"
+                   th:value="'/tours/' + ${output.tourInfo.tourCode} + '/reserve?form&' + ${query} + '&page=' + ${param.page} + '&size=' + ${param.size}"/>
+            <button id="loginBtn" type="submit">
+                <span th:text="#{label.tr.menu.loginBtnMessage}"></span>
+            </button>
+        </form>
+
+        <form th:action="@{/tours}" method="get" class="inline">
+            <input type="hidden" name="page" th:value="${param.page}"/>
+            <input type="hidden" name="size" th:value="${param.size}"/>
+            <button th:id="${'backToToursBtn'}" type="submit">
+                <span th:text="#{label.tr.common.goBackMessage}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>

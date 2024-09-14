@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div class="info">
+        <p th:utext="#{label.tr.managecustomer.createConfirmMessage}"></p>
+    </div>
+
+    <div th:replace="~{managecustomer/fragment/customerTable :: customerTableFragment(customerForm=${customerForm})}"></div>
+
+    <form th:object="${customerForm}" th:action="@{/customers/create}" method="post">
+        <!-- Hidden fields -->
+        <input type="hidden" th:field="*{customerKana}"/>
+        <input type="hidden" th:field="*{customerName}"/>
+        <input type="hidden" th:field="*{customerBirthYear}"/>
+        <input type="hidden" th:field="*{customerBirthMonth}"/>
+        <input type="hidden" th:field="*{customerBirthDay}"/>
+        <input type="hidden" th:field="*{customerJob}"/>
+        <input type="hidden" th:field="*{customerMail}"/>
+        <input type="hidden" th:field="*{customerTel}"/>
+        <input type="hidden" th:field="*{customerPost}"/>
+        <input type="hidden" th:field="*{customerAdd}"/>
+        <input type="hidden" th:field="*{customerPass}"/>
+        <input type="hidden" th:field="*{customerPassConfirm}"/>
+
+        <button id="backToFormBtn" name="redo" type="submit">
+            <span th:text="#{label.tr.common.goBackMessage}"></span>
+        </button>
+        &nbsp;
+        <button id="registerBtn" type="submit">
+            <span th:text="#{label.tr.common.register}"></span>
+        </button>
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <h2 id="screenName">
+        <span th:text="#{label.tr.managereservation.beforecancelScreenTitleMessage}"></span>
+    </h2>
+
+    <div class="info">
+        <span th:utext="#{label.tr.managereservation.beforecancelScreenFlowMessage}"></span>
+    </div>
+
+    <p>
+        <span th:text="#{label.tr.managereservation.beforeCancelScreenMessage}"></span>
+    </p>
+
+    <div class="span-24">
+        <div th:replace="~{common/fragment/resultMessages :: resultMessages(resultMessages=${resultMessages})}"></div>
+        <br>
+        <div th:replace="~{common/fragment/reserveTable :: reserveTableFragment(reserve=${output.reserve})}"></div>
+        <br>
+        <div th:replace="~{common/fragment/customerTable :: customerTableFragment(customer=${output.customer})}"></div>
+        <br>
+        <hr>
+        <div th:replace="~{common/fragment/priceTable :: priceTableFragment(priceCalculateOutput=${output.priceCalculateOutput})}"></div>
+        <br>
+        <hr/>
+        <table>
+            <caption>
+                <span th:text="#{label.tr.common.specialNotes}"></span>
+            </caption>
+            <tr>
+                <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+                <td colspan="3" th:text="${output.reserve.remarks}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="span-9">
+        <form th:action="@{cancel}" id="reservationCancelForm" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <button id="backToListBtn" name="backTolist" type="submit">
+                            <span th:text="#{label.tr.managereservation.returnToListScreenBtnMessage}"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button id="cancelBtn" type="submit">
+                            <span th:text="#{label.tr.managereservation.cancelReservationBtnMessage}"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="pagination(page, pageLinkMaxDispNum)" th:object="${page}" th:remove="tag">
+    <ul th:if="*{totalElements} != 0" class="pagination"
+        th:with="disabledHref = 'javascript:void(0)', currentUrl = ${requestURI}">
+        <li th:class="*{isFirst()} ? 'disabled'">
+            <!--/* (6) */-->
+            <a th:href="*{isFirst()} ? ${disabledHref} : @{{currentUrl}(currentUrl=${currentUrl},page=0,size=*{size})}">&lt;&lt;</a>
+        </li>
+        <li th:class="*{isFirst()} ? 'disabled'">
+            <a th:href="*{isFirst()} ? ${disabledHref} : @{{currentUrl}(currentUrl=${currentUrl},page=*{number - 1},size=*{size})}">&lt;</a>
+        </li>
+        <li th:each="i : ${T(org.terasoluna.tourreservation.common.PageInfo).sequence(page, pageLinkMaxDispNum)}"
+            th:with="isActive=${i} == *{number + 1}" th:class="${isActive} ? 'active'">
+            <a th:href="${isActive} ? ${disabledHref} : @{{currentUrl}(currentUrl=${currentUrl},page=${i - 1},size=*{size})}"
+               th:text="${i}"></a>
+        </li>
+        <li th:class="*{isLast()} ? 'disabled'">
+            <a th:href="*{isLast()} ? ${disabledHref} : @{{currentUrl}(currentUrl=${currentUrl},page=*{number + 1},size=*{size})}">&gt;</a>
+        </li>
+        <li th:class="*{isLast()} ? 'disabled'">
+            <a th:href="*{isLast()} ? ${disabledHref} : @{{currentUrl}(currentUrl=${currentUrl},page=*{totalPages - 1},size=*{size})}">&gt;&gt;</a>
+        </li>
+    </ul>
+</div>
+</html>

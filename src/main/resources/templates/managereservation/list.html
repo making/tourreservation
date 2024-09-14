@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+    <h1 id="screenName">
+        <span th:text="#{label.tr.managereservation.manageReservationMessage}"></span>
+    </h1>
+    <div class="info">
+        <span th:utext="#{label.tr.managereservation.manageReservationFlowMessage}"></span>
+    </div>
+    <br/>
+    <div th:if="${rows.size() == 0}">
+        <div>
+            <span th:utext="#{label.tr.managereservation.manageReservationNoRecordMessage}"></span>
+        </div>
+        <span th:utext="#{label.tr.managereservation.manageReservationNoCancelMessage}"></span>
+    </div>
+    <div th:if="${!rows.isEmpty()}">
+        <table id="reservationsTable">
+            <caption>
+                <span th:utext="#{label.tr.managereservation.ReserveListMessage}"></span>
+            </caption>
+            <tr>
+                <th><span th:text="#{label.tr.managereservation.reserveNo}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.tourName}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.depDay}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.days}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.origin}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.destination}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.noOfPerson}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.paymentStatus}"></span></th>
+                <th><span th:text="#{label.tr.managereservation.totalCost}"></span></th>
+                <th></th>
+            </tr>
+            <tr th:each="row, rowStat : ${rows}">
+                <td th:text="${row.reserve.reserveNo}"></td>
+                <td th:text="${row.reserve.tourInfo.tourName}"></td>
+                <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(row.reserve.tourInfo.depDay), 'uuuu年MM月dd日')}"></td>
+                <td th:text="${row.reserve.tourInfo.tourDays}"></td>
+                <td th:text="${row.reserve.tourInfo.departure.depName}"></td>
+                <td th:text="${row.reserve.tourInfo.arrival.arrName}"></td>
+                <td>
+                    <span th:text="#{label.tr.common.adult}"></span>
+                    <span th:text="${row.reserve.adultCount}"></span> <br/>
+                    <span th:text="#{label.tr.common.child}"></span>
+                    <span th:text="${row.reserve.childCount}"></span>
+                </td>
+                <td>
+                    <div th:if="${row.reserve.transfer == '1'}">
+                        <span th:text="#{label.tr.managereservation.done}"></span>
+                    </div>
+                    <div th:if="${row.reserve.transfer == '0'}">
+                        <span th:text="#{label.tr.managereservation.paymentNotDone}"></span>
+                    </div>
+                </td>
+                <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(row.reserve.sumPrice, T(java.util.Locale).JAPAN)}"></td>
+                <td>
+                    <table class="com-button-table span-4">
+                        <tr>
+                            <td>
+                                <form th:action="@{/reservations/{reserveNo}(reserveNo=${row.reserve.reserveNo})}"
+                                      method="get">
+                                    <button id="showBtn" type="submit">
+                                        <span th:text="#{label.tr.managereservation.showDetailsBtnMessage}"></span>
+                                    </button>
+                                </form>
+                                <div th:if="${!row.limitExceeding}">
+                                    <div th:if="${row.reserve.transfer == '0'}">
+                                        <form th:action="@{/reservations/{reserveNo}/update(reserveNo=${row.reserve.reserveNo})}"
+                                              method="get">
+                                            <button id="changeBtn" name="form" type="submit">
+                                                <span th:text="#{label.tr.managereservation.changeReservationBtnMessage}"></span>
+                                            </button>
+                                        </form>
+
+                                        <form th:action="@{/reservations/{reserveNo}/cancel(reserveNo=${row.reserve.reserveNo})}"
+                                              method="get">
+                                            <button id="cancelBtn" type="submit">
+                                                <span th:text="#{label.tr.managereservation.cancelReservationBtnMessage}"></span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br/>
+    </div>
+</div>
+</body>
+</html>

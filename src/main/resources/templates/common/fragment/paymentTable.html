@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<div th:fragment="paymentTableFragment(paymentTimeLimit)">
+    <table id="paymentTable">
+        <caption>
+            <span th:text="#{label.tr.common.paymentInfo}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentMethod}"></span></td>
+            <td colspan="3"><span th:text="#{label.tr.common.bankTransfer}"></span></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentAccount}"></span></td>
+            <td colspan="3">
+                <span th:text="#{label.tr.common.paymentCompanyname}"></span> <br />
+                <span th:text="#{label.tr.common.savingsAccount}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentTimeLimit}"></span></td>
+            <td colspan="3" th:text="${#temporals.format(paymentTimeLimit, 'uuuu年MM月dd日')}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentInquiry}"></span></td>
+            <td colspan="3">
+                <span th:text="#{label.tr.common.companyName}"></span>
+                <span th:text="#{label.tr.common.companyTel}"></span>
+                <span th:text="#{label.tr.common.companyEmail}"></span>
+            </td>
+        </tr>
+    </table>
+</div>
+</html>

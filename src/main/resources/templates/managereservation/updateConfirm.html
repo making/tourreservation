@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+
+<div class="container">
+    <h2 id="screenName">
+        <span th:text="#{label.tr.managereservation.manageReservationConfirmScreenTitleMessage}"></span>
+    </h2>
+
+    <div class="info">
+        <span th:utext="#{label.tr.managereservation.manageReservationConfirmScreenFlowMessage}"></span>
+    </div>
+
+    <span th:utext="#{label.tr.managereservation.manageReservationConfirmDetailMessage}"></span>
+
+    <table>
+        <caption>
+            <span th:text="#{label.tr.searchtour.tourDetailCaptionMessage}"></span>
+        </caption>
+        <tr>
+            <th><span th:text="#{label.tr.searchtour.reserveNo}"></span></th>
+            <td th:text="${output.reserve.reserveNo}"></td>
+            <th><span th:text="#{label.tr.searchtour.reserveDate}"></span></th>
+            <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(output.reserve.reservedDay), 'uuuu年MM月dd日')}"></td>
+        </tr>
+        <tr>
+            <th><span th:text="#{label.tr.searchtour.tourname}"></span></th>
+            <td colspan="3" th:text="${output.reserve.tourInfo.tourName}"></td>
+        </tr>
+        <tr>
+            <th><span th:text="#{label.tr.searchtour.depDay}"></span></th>
+            <td th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(output.reserve.tourInfo.depDay), 'uuuu年MM月dd日')}"></td>
+            <th><span th:text="#{label.tr.searchtour.tourDays}"></span></th>
+            <td th:text="${output.reserve.tourInfo.tourDays}"></td>
+        </tr>
+        <tr>
+            <th><span th:text="#{label.tr.searchtour.depName}"></span></th>
+            <td th:text="${output.reserve.tourInfo.departure.depName}"></td>
+            <th><span th:text="#{label.tr.searchtour.arrName}"></span></th>
+            <td th:text="${output.reserve.tourInfo.arrival.arrName}"></td>
+        </tr>
+    </table>
+
+    <br/>
+    <hr/>
+
+    <table id="priceTable">
+        <caption>
+            <span th:text="#{label.tr.searchtour.statementOfCharges}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.classificationOnAge}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.unitPrice}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.noOfPeople}"></span></td>
+            <td><span th:text="#{label.tr.searchtour.charge}"></span></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.adult}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(output.priceCalculateOutput.adultUnitPrice, T(java.util.Locale).JAPAN)}"></td>
+            <td th:text="${output.priceCalculateOutput.adultCount}"></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(output.priceCalculateOutput.adultPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.searchtour.child}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(output.priceCalculateOutput.childUnitPrice, T(java.util.Locale).JAPAN)}"></td>
+            <td th:text="${output.priceCalculateOutput.childCount}"></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(output.priceCalculateOutput.childPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><span th:text="#{label.tr.searchtour.sumPrice}"></span></td>
+            <td th:text="${T(org.thymeleaf.util.NumberUtils).formatCurrency(output.priceCalculateOutput.sumPrice, T(java.util.Locale).JAPAN)}"></td>
+        </tr>
+    </table>
+
+    <br/>
+    <hr/>
+
+    <table>
+        <caption>
+            <span th:text="#{label.tr.common.specialNotes}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+            <td colspan="3" th:text="${output.reserve.remarks}"></td>
+        </tr>
+    </table>
+
+    <br/>
+    <span th:utext="#{label.tr.managereservation.manageReservationConfirmCautionMessage}"></span>
+    <br/>
+    <hr/>
+
+    <table>
+        <caption>
+            <span th:text="#{label.tr.common.paymentInfo}"></span>
+        </caption>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentMethod}"></span></td>
+            <td colspan="3"><span th:text="#{label.tr.common.bankTransfer}"></span></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentAccount}"></span></td>
+            <td colspan="3"><span th:text="#{label.tr.common.companyName}"></span> <br/> <span
+                    th:text="#{label.tr.common.savingsAccount}"></span></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentTimeLimit}"></span></td>
+            <td colspan="3"
+                th:text="${#temporals.format(T(org.terasoluna.tourreservation.common.LegacyDate).toLocalDate(output.paymentTimeLimit), 'uuuu年MM月dd日')}"></td>
+        </tr>
+        <tr>
+            <td><span th:text="#{label.tr.common.paymentInquiry}"></span></td>
+            <td colspan="3"><span th:text="#{label.tr.common.paymentCompanyname}"></span> <span
+                    th:text="#{label.tr.common.companyTel}"></span> <span
+                    th:text="#{label.tr.common.companyEmail}"></span></td>
+        </tr>
+    </table>
+
+    <br/>
+    <span th:utext="#{label.tr.managereservation.manageReservationConfirmMessage}"></span>
+    <br/>
+
+    <form th:action="@{update}" th:object="${manageReservationForm}" id="manageReservationForm" class="inline" method="post">
+        <input type="hidden" th:field="*{adultCount}"/>
+        <input type="hidden" th:field="*{childCount}"/>
+
+        <div class="span-6">
+            <table>
+                <tr>
+                    <td>
+                        <button id="backToFormBtn" name="redo" type="submit">
+                            <span th:text="#{label.tr.managereservation.changeReservationStaBtnMessage}"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button id="changeBtn" type="submit">
+                            <span th:text="#{label.tr.managereservation.changeReservationFinBtnMessage}"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

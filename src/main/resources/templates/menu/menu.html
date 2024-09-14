@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div id="messagesArea" class="box">
+    <span th:text="#{label.tr.menu.menuMessage}"></span>
+    <div sec:authorize="!hasRole('USER')">
+        <span th:text="#{label.tr.common.notLoginMessage}"></span>
+    </div>
+    <div sec:authorize="hasRole('USER')">
+        <form th:action="@{/logout}" method="post" class="inline">
+            <button id="logoutBtn" name="logout">
+                <span th:text="#{label.tr.common.logout}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="span-24 last">
+    <form th:action="@{/tours}" method="get">
+        <fieldset class="notice">
+            <div class="span-5">
+                <button id="searchTourBtn" name="initForm" style="width: 150px;">
+                    <span th:text="#{label.tr.menu.searchBtnMessage}"></span>
+                </button>
+            </div>
+            <div class="span-18 last">
+                <p>
+                    <span th:utext="#{label.tr.menu.tourSearchMessage}"></span>
+                </p>
+            </div>
+        </fieldset>
+    </form>
+
+    <div sec:authorize="!hasRole('USER')">
+        <form th:action="@{/login}" method="get">
+            <fieldset class="notice">
+                <div class="span-5">
+                    <button id="loginBtn" style="width: 150px;">
+                        <span th:text="#{label.tr.menu.loginBtnMessage}"></span>
+                    </button>
+                </div>
+                <div class="span-18 last">
+                    <p>
+                        <span th:utext="#{label.tr.menu.loginMessage}"></span>
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+
+        <form th:action="@{/customers/create}" method="get">
+            <fieldset class="notice">
+                <div class="span-5">
+                    <button id="customerRegisterBtn" name="form" style="width: 150px;">
+                        <span th:text="#{label.tr.menu.customerRegisterBtnMessage}"></span>
+                    </button>
+                </div>
+                <div class="span-18 last">
+                    <p>
+                        <span th:text="#{label.tr.menu.customerRegisterMessage}"></span>
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div sec:authorize="hasRole('USER')">
+        <form th:action="@{/reservations/me}" method="get">
+            <fieldset class="notice">
+                <div class="span-5">
+                    <button id="reservedToursReferBtn" style="width: 150px;">
+                        <span th:text="#{label.tr.menu.referBtnMessage}"></span>
+                    </button>
+                </div>
+                <div class="span-18 last">
+                    <p>
+                        <span th:text="#{label.tr.menu.referMessage}"></span>
+                    </p>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

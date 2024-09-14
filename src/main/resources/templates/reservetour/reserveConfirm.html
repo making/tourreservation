@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/template :: layout(~{::title},~{::body/content()})}" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.common}"></title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{common/top :: topFragment}"></div>
+
+    <h2 id="screenName">
+        <span th:text="#{label.tr.searchtour.titleConfirmScreenMessage}"></span>
+    </h2>
+
+    <div class="info">
+        <span th:utext="#{label.tr.searchtour.confirmScreenFlowMessage}"></span>
+    </div>
+
+    <p>
+        <span th:utext="#{label.tr.searchtour.pressReserveBtnMessage}"></span>
+    </p>
+
+    <div class="span-24">
+        <br>
+        <div th:replace="~{common/fragment/tourInfoTable :: tourInfoTableFragment(tourInfo=${output.tourInfo})}"></div>
+        <br>
+        <div th:replace="~{common/fragment/customerTable :: customerTableFragment(customer=${output.customer})}"></div>
+        <br>
+        <hr>
+        <div th:replace="~{common/fragment/priceTable :: priceTableFragment(priceCalculateOutput=${output.priceCalculateOutput})}"></div>
+        <br>
+        <hr/>
+        <table id="specialNotesTable">
+            <caption>
+                <span th:text="#{label.tr.common.specialNotes}"></span>
+            </caption>
+            <tr>
+                <td><span th:text="#{label.tr.common.opinionSuggestion}"></span></td>
+                <td colspan="3" th:text="${reserveTourForm.remarks}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="span-4 append-20">
+        <form th:action="@{reserve}" th:object="${reserveTourForm}" id="reserveTourForm" method="post" class="inline">
+            <input type="hidden" th:field="*{childCount}"/>
+            <input type="hidden" th:field="*{adultCount}"/>
+            <input type="hidden" th:field="*{remarks}"/>
+            <input type="hidden" name="page" th:value="${param.page}"/>
+            <input type="hidden" name="size" th:value="${param.size}"/>
+            <button id="reserveBtn" type="submit">
+                <span th:text="#{label.tr.searchtour.confirmedMessage}"></span>
+            </button>
+        </form>
+        <form th:action="@{reserve}" th:object="${reserveTourForm}" method="post">
+            <input type="hidden" th:field="*{childCount}"/>
+            <input type="hidden" th:field="*{adultCount}"/>
+            <input type="hidden" th:field="*{remarks}"/>
+            <input type="hidden" name="page" th:value="${param.page}"/>
+            <input type="hidden" name="size" th:value="${param.size}"/>
+            <button id="goBackBtn" name="redo" type="submit">
+                <span th:text="#{label.tr.common.goBackMessage}"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
