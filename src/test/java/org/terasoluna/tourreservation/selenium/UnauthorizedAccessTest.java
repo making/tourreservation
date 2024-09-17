@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.terasoluna.tourreservation.app.common.constants.MessageId;
+import org.terasoluna.tourreservation.message.ScreenMessageId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,7 +89,7 @@ class UnauthorizedAccessTest extends SeleniumTestSupport {
 		driver.get(baseUrl() + "/reservations/" + reserveNumber);
 
 		assertThat(driver.findElement(By.cssSelector("p.box")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
 
 		// login
 		driver.findElement(By.id("password")).clear();
@@ -99,7 +99,7 @@ class UnauthorizedAccessTest extends SeleniumTestSupport {
 		driver.findElement(By.id("loginBtn")).click();
 
 		assertThat(driver.findElement(By.id("screenName")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_MANAGERESERVATION_MANAGERESERVATIONSHOWSCREENTITLEMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_MANAGERESERVATION_MANAGERESERVATIONSHOWSCREENTITLEMESSAGE));
 
 		WebElement reserveTable = driver.findElement(By.id("reserveTable"));
 		assertThat(reserveNumber).isEqualTo(reserveTable.findElement(By.xpath(".//tr[1]/td[2]")).getText());
@@ -144,7 +144,8 @@ class UnauthorizedAccessTest extends SeleniumTestSupport {
 		// show other user's reservation
 		driver.get(baseUrl() + "/reservations/" + reserveNumber);
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 	}
 
 }

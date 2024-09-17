@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.terasoluna.tourreservation.app.common.constants.MessageId;
+import org.terasoluna.tourreservation.message.ScreenMessageId;
 
 class SystemErrorTest extends SeleniumTestSupport {
 
@@ -42,7 +42,8 @@ class SystemErrorTest extends SeleniumTestSupport {
 
 		driver.get(baseUrl() + "/reservations/aaaaaa");
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0003));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0003));
 	}
 
 }

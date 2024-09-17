@@ -22,7 +22,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.terasoluna.tourreservation.app.common.constants.MessageId;
+import org.terasoluna.tourreservation.message.ScreenMessageId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,7 +59,8 @@ class TokenCheckErrorTest extends SeleniumTestSupport {
 		// register
 		driver.findElement(By.id("registerBtn")).click();
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 	}
 
 	@Test
@@ -93,7 +94,8 @@ class TokenCheckErrorTest extends SeleniumTestSupport {
 		// register
 		driver.findElement(By.id("registerBtn")).click();
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 
 	}
 
@@ -149,7 +151,8 @@ class TokenCheckErrorTest extends SeleniumTestSupport {
 		// reserve
 		driver.findElement(By.id("reserveBtn")).click();
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 	}
 
 	@Test
@@ -220,7 +223,8 @@ class TokenCheckErrorTest extends SeleniumTestSupport {
 		// change reservation
 		driver.findElement(By.id("changeBtn")).click();
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 
 		// go to top screen(back to top)
 		driver.findElement(By.id("goToTopLink")).click();
@@ -300,7 +304,8 @@ class TokenCheckErrorTest extends SeleniumTestSupport {
 		// cancel reservation
 		driver.findElement(By.id("cancelBtn")).click();
 
-		assertThat(driver.findElement(By.cssSelector("p")).getText()).isEqualTo(getMessage(MessageId.E_TR_FW_0006));
+		assertThat(driver.findElement(By.cssSelector("p")).getText())
+			.isEqualTo(getMessage(ScreenMessageId.E_TR_FW_0006));
 
 		// go to top screen(back to top)
 		driver.findElement(By.id("goToTopLink")).click();

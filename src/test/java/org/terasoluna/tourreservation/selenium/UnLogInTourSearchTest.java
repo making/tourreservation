@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.terasoluna.tourreservation.app.common.constants.MessageId;
+import org.terasoluna.tourreservation.message.ScreenMessageId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,14 +31,14 @@ class UnLogInTourSearchTest extends SeleniumTestSupport {
 	void unLogInTourSearch() {
 
 		assertThat(driver.findElement(By.id("messagesArea")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_MENU_MENUMESSAGE) + "\n"
-					+ getMessage(MessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_MENU_MENUMESSAGE) + "\n"
+					+ getMessage(ScreenMessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
 
 		// go to search tour screen
 		driver.findElement(By.id("searchTourBtn")).click();
 
 		assertThat(driver.findElement(By.id("messagesArea")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
 
 		// input search criteria
 		LocalDate dt = LocalDate.now();
@@ -64,10 +64,10 @@ class UnLogInTourSearchTest extends SeleniumTestSupport {
 		toursTable.findElements(By.tagName("a")).getFirst().click();
 
 		assertThat(driver.findElement(By.id("messagesArea")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE));
 
 		assertThat(driver.findElement(By.id("screenName")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_SEARCHTOUR_TITLEDETAILSCREENMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_SEARCHTOUR_TITLEDETAILSCREENMESSAGE));
 
 		WebElement priceTable = driver.findElement(By.id("priceTable"));
 		assertThat(priceTable.findElement(By.xpath(".//tr[2]/td[2]")).getText().replaceAll("[^0-9]", ""))
@@ -86,7 +86,7 @@ class UnLogInTourSearchTest extends SeleniumTestSupport {
 		driver.findElement(By.id("loginBtn")).click();
 
 		assertThat(driver.findElement(By.id("screenName")).getText())
-			.isEqualTo(getMessage(MessageId.LABEL_TR_SEARCHTOUR_TITLEDETAILSCREENMESSAGE));
+			.isEqualTo(getMessage(ScreenMessageId.LABEL_TR_SEARCHTOUR_TITLEDETAILSCREENMESSAGE));
 	}
 
 }

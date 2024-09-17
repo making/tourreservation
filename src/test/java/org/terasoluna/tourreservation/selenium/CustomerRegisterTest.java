@@ -21,11 +21,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_DAY;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_LOGOUT;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_MONTH;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_YEAR;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_MENU_MENUMESSAGE;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_DAY;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_LOGOUT;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_MONTH;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_YEAR;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MENU_MENUMESSAGE;
 
 class CustomerRegisterTest extends SeleniumTestSupport {
 

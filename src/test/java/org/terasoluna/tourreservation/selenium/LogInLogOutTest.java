@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_LOGOUT;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE;
-import static org.terasoluna.tourreservation.app.common.constants.MessageId.LABEL_TR_MENU_MENUMESSAGE;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_LOGOUT;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_COMMON_NOTLOGINMESSAGE;
+import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MENU_MENUMESSAGE;
 
 class LogInLogOutTest extends SeleniumTestSupport {
 
