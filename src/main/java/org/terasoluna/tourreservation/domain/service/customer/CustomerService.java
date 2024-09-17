@@ -16,7 +16,7 @@
 package org.terasoluna.tourreservation.domain.service.customer;
 
 import org.terasoluna.tourreservation.domain.model.Customer;
-import org.terasoluna.tourreservation.domain.repository.customer.CustomerRepository;
+import org.terasoluna.tourreservation.domain.mapper.customer.CustomerMapper;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,17 +26,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomerService {
 
-	private final CustomerRepository customerRepository;
+	private final CustomerMapper customerMapper;
 
 	private final PasswordEncoder passwordEncoder;
 
-	public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
-		this.customerRepository = customerRepository;
+	public CustomerService(CustomerMapper customerMapper, PasswordEncoder passwordEncoder) {
+		this.customerMapper = customerMapper;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	public Customer findOne(String customerCode) {
-		return customerRepository.findById(customerCode).orElse(null);
+		return customerMapper.findById(customerCode).orElse(null);
 	}
 
 	public Customer register(Customer customer, String rawPassword) {
@@ -44,7 +44,7 @@ public class CustomerService {
 		String password = passwordEncoder.encode(rawPassword);
 
 		customer.setCustomerPass(password);
-		customerRepository.insert(customer);
+		customerMapper.insert(customer);
 		return customer;
 	}
 

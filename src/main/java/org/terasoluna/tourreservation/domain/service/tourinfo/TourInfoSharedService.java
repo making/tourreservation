@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoRepository;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoMapper;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,17 +33,17 @@ public class TourInfoSharedService {
 
 	private static final Logger log = LoggerFactory.getLogger(TourInfoSharedService.class);
 
-	private final TourInfoRepository tourInfoRepository;
+	private final TourInfoMapper tourInfoMapper;
 
 	private final Clock clock;
 
-	public TourInfoSharedService(TourInfoRepository tourInfoRepository, Clock clock) {
-		this.tourInfoRepository = tourInfoRepository;
+	public TourInfoSharedService(TourInfoMapper tourInfoMapper, Clock clock) {
+		this.tourInfoMapper = tourInfoMapper;
 		this.clock = clock;
 	}
 
 	public TourInfo findOneWithDetails(String tourCode) {
-		return tourInfoRepository.findOneWithDetails(tourCode);
+		return tourInfoMapper.findOneWithDetails(tourCode);
 	}
 
 	public boolean isOverPaymentLimit(TourInfo tour) {
@@ -56,7 +56,7 @@ public class TourInfoSharedService {
 	}
 
 	public TourInfo findOneWithDetailsForUpdate(String tourCode) {
-		return tourInfoRepository.findOneWithDetailsForUpdate(tourCode);
+		return tourInfoMapper.findOneWithDetailsForUpdate(tourCode);
 	}
 
 }

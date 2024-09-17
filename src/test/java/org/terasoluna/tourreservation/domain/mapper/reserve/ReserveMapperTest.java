@@ -1,4 +1,4 @@
-package org.terasoluna.tourreservation.domain.repository.reserve;
+package org.terasoluna.tourreservation.domain.mapper.reserve;
 
 import java.sql.Date;
 import java.time.Instant;
@@ -27,10 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(TestcontainersConfiguration.class)
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ReserveRepositoryTest {
+class ReserveMapperTest {
 
 	@Autowired
-	ReserveRepository reserveRepository;
+	ReserveMapper reserveMapper;
 
 	@Autowired
 	NamedParameterJdbcTemplate jdbcTemplate;
@@ -81,7 +81,7 @@ class ReserveRepositoryTest {
 			jdbcTemplate.update(q, param);
 		}
 
-		Reserve reserve = reserveRepository.findOneWithDetail(reserveNo);
+		Reserve reserve = reserveMapper.findOneWithDetail(reserveNo);
 		assertThat(reserve).isNotNull();
 		assertThat(reserve.getReserveNo()).isEqualTo(reserveNo);
 		assertThat(reserve.getReservedDay()).isEqualTo(Date.from(now));
@@ -99,7 +99,7 @@ class ReserveRepositoryTest {
 	@Test
 	void findWithDetail02() {
 		String reserveNo = "10000000";
-		Reserve reserve = reserveRepository.findOneWithDetail(reserveNo);
+		Reserve reserve = reserveMapper.findOneWithDetail(reserveNo);
 		assertThat(reserve).isNull();
 	}
 
@@ -163,7 +163,7 @@ class ReserveRepositoryTest {
 		}
 
 		// run
-		Long retValue = reserveRepository.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
+		Long retValue = reserveMapper.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
 
 		// assert
 		assertThat(retValue).isEqualTo(7L);
@@ -175,7 +175,7 @@ class ReserveRepositoryTest {
 		tourInfo.setTourCode("xxxxx");
 
 		// run
-		Long retValue = reserveRepository.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
+		Long retValue = reserveMapper.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
 
 		// assert
 		assertThat(retValue).isNull();
@@ -282,7 +282,7 @@ class ReserveRepositoryTest {
 		}
 
 		// run
-		List<Reserve> reservationList = reserveRepository.findAllWithTourInfoByCustomer(customerCode);
+		List<Reserve> reservationList = reserveMapper.findAllWithTourInfoByCustomer(customerCode);
 
 		// assert
 		assertThat(reservationList).isNotNull();
@@ -331,7 +331,7 @@ class ReserveRepositoryTest {
 		String customerCode = "xxxxxxxx";
 
 		// run
-		List<Reserve> reservationList = reserveRepository.findAllWithTourInfoByCustomer(customerCode);
+		List<Reserve> reservationList = reserveMapper.findAllWithTourInfoByCustomer(customerCode);
 
 		assertThat(reservationList).isNotNull();
 		assertThat(reservationList).isEmpty();

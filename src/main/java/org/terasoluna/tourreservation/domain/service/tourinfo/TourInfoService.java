@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoRepository;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoSearchCriteria;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoMapper;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoSearchCriteria;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,18 +32,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TourInfoService {
 
-	private final TourInfoRepository tourInfoRepository;
+	private final TourInfoMapper tourInfoMapper;
 
-	public TourInfoService(TourInfoRepository tourInfoRepository) {
-		this.tourInfoRepository = tourInfoRepository;
+	public TourInfoService(TourInfoMapper tourInfoMapper) {
+		this.tourInfoMapper = tourInfoMapper;
 	}
 
 	public Page<TourInfo> searchTour(TourInfoSearchCriteria criteria, Pageable pageable) {
 
-		long total = tourInfoRepository.countBySearchCriteria(criteria);
+		long total = tourInfoMapper.countBySearchCriteria(criteria);
 		List<TourInfo> content;
 		if (0 < total) {
-			content = tourInfoRepository.findPageBySearchCriteria(criteria, pageable);
+			content = tourInfoMapper.findPageBySearchCriteria(criteria, pageable);
 		}
 		else {
 			content = Collections.emptyList();

@@ -16,7 +16,7 @@
 package org.terasoluna.tourreservation.domain.service.reserve;
 
 import org.terasoluna.tourreservation.domain.model.Reserve;
-import org.terasoluna.tourreservation.domain.repository.reserve.ReserveRepository;
+import org.terasoluna.tourreservation.domain.mapper.reserve.ReserveMapper;
 
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -27,16 +27,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthorizedReserveSharedService {
 
-	private final ReserveRepository reserveRepository;
+	private final ReserveMapper reserveMapper;
 
-	public AuthorizedReserveSharedService(ReserveRepository reserveRepository) {
-		this.reserveRepository = reserveRepository;
+	public AuthorizedReserveSharedService(ReserveMapper reserveMapper) {
+		this.reserveMapper = reserveMapper;
 	}
 
 	@PostAuthorize("returnObject == null or returnObject.customer.customerCode == principal.customer.customerCode")
 	@Nullable
 	public Reserve findOne(String reserveNo) {
-		return reserveRepository.findById(reserveNo).orElse(null);
+		return reserveMapper.findById(reserveNo).orElse(null);
 	}
 
 }

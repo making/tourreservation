@@ -1,4 +1,4 @@
-package org.terasoluna.tourreservation.domain.repository.tourinfo;
+package org.terasoluna.tourreservation.domain.mapper.tourinfo;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,12 +29,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(TestcontainersConfiguration.class)
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class TourInfoRepositoryTest {
+class TourInfoMapperTest {
 
 	TourInfoService tourInfoService;
 
 	@Autowired
-	TourInfoRepository tourInfoRepository;
+	TourInfoMapper tourInfoMapper;
 
 	@Autowired
 	NamedParameterJdbcTemplate jdbcTemplate;
@@ -55,7 +55,7 @@ class TourInfoRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-		tourInfoService = new TourInfoService(tourInfoRepository);
+		tourInfoService = new TourInfoService(tourInfoMapper);
 		criteria = new TourInfoSearchCriteria();
 		tourCode = "8888888888";
 		depDay = LocalDate.of(2014, 2, 2);

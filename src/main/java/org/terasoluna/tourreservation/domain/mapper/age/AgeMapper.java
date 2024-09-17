@@ -13,26 +13,16 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.terasoluna.tourreservation.domain.repository.tourinfo;
+package org.terasoluna.tourreservation.domain.mapper.age;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.terasoluna.tourreservation.domain.model.TourInfo;
-
-import org.springframework.data.domain.Pageable;
+import org.terasoluna.tourreservation.domain.model.Age;
 
 @Mapper
-public interface TourInfoRepository {
+public interface AgeMapper {
 
-	TourInfo findOneWithDetails(String tourCode);
-
-	TourInfo findOneWithDetailsForUpdate(String tourCode);
-
-	List<TourInfo> findPageBySearchCriteria(@Param("criteria") TourInfoSearchCriteria criteria,
-			@Param("pageable") Pageable pageable);
-
-	long countBySearchCriteria(@Param("criteria") TourInfoSearchCriteria criteria);
+	Optional<Age> findById(String ageCode);
 
 }

@@ -13,18 +13,31 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.terasoluna.tourreservation.domain.repository.customer;
+package org.terasoluna.tourreservation.domain.mapper.reserve;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.terasoluna.tourreservation.domain.model.Customer;
+import org.terasoluna.tourreservation.domain.model.Reserve;
 
 @Mapper
-public interface CustomerRepository {
+public interface ReserveMapper {
 
-	Optional<Customer> findById(String customerCode);
+	Optional<Reserve> findById(String reserveNo);
 
-	void insert(Customer customer);
+	void insert(Reserve reserve);
+
+	void update(Reserve reserve);
+
+	void deleteById(String reserveNo);
+
+	Reserve findOneForUpdate(String reserveNo);
+
+	Reserve findOneWithDetail(String reserveNo);
+
+	Long countReservedPersonSumByTourInfo(String tourCode);
+
+	List<Reserve> findAllWithTourInfoByCustomer(String customerCode);
 
 }

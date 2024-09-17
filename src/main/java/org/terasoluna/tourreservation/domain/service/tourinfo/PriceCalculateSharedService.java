@@ -17,7 +17,7 @@ package org.terasoluna.tourreservation.domain.service.tourinfo;
 
 import jakarta.annotation.PostConstruct;
 import org.terasoluna.tourreservation.domain.model.Age;
-import org.terasoluna.tourreservation.domain.repository.age.AgeRepository;
+import org.terasoluna.tourreservation.domain.mapper.age.AgeMapper;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,7 +28,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class PriceCalculateSharedService {
 
-	private final AgeRepository ageRepository;
+	private final AgeMapper ageMapper;
 
 	private final PlatformTransactionManager transactionManager;
 
@@ -36,8 +36,8 @@ public class PriceCalculateSharedService {
 
 	private Age childAge;
 
-	public PriceCalculateSharedService(AgeRepository ageRepository, PlatformTransactionManager transactionManager) {
-		this.ageRepository = ageRepository;
+	public PriceCalculateSharedService(AgeMapper ageMapper, PlatformTransactionManager transactionManager) {
+		this.ageMapper = ageMapper;
 		this.transactionManager = transactionManager;
 	}
 
@@ -73,8 +73,8 @@ public class PriceCalculateSharedService {
 		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus status) {
-				childAge = ageRepository.findById("1").orElseThrow(IllegalStateException::new);
-				adultAge = ageRepository.findById("0").orElseThrow(IllegalStateException::new);
+				childAge = ageMapper.findById("1").orElseThrow(IllegalStateException::new);
+				adultAge = ageMapper.findById("0").orElseThrow(IllegalStateException::new);
 			}
 		});
 	}

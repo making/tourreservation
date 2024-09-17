@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.domain.model.Arrival;
 import org.terasoluna.tourreservation.domain.model.Departure;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoRepository;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoSearchCriteria;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoMapper;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoSearchCriteria;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,12 +24,12 @@ class TourInfoServiceTest {
 
 	TourInfoService tourInfoService;
 
-	TourInfoRepository tourInfoRepository;
+	TourInfoMapper tourInfoMapper;
 
 	@BeforeEach
 	void setUp() {
-		this.tourInfoRepository = mock(TourInfoRepository.class);
-		this.tourInfoService = new TourInfoService(tourInfoRepository);
+		this.tourInfoMapper = mock(TourInfoMapper.class);
+		this.tourInfoService = new TourInfoService(tourInfoMapper);
 	}
 
 	@Test
@@ -53,9 +53,9 @@ class TourInfoServiceTest {
 
 		Page<TourInfo> page = new PageImpl<>(mockedList, pageable, 1L);
 
-		when(this.tourInfoRepository.findPageBySearchCriteria(criteria, pageable)).thenReturn(mockedList);
+		when(this.tourInfoMapper.findPageBySearchCriteria(criteria, pageable)).thenReturn(mockedList);
 
-		when(this.tourInfoRepository.countBySearchCriteria(criteria)).thenReturn(1L);
+		when(this.tourInfoMapper.countBySearchCriteria(criteria)).thenReturn(1L);
 
 		// run
 		Page<TourInfo> result = this.tourInfoService.searchTour(criteria, pageable);

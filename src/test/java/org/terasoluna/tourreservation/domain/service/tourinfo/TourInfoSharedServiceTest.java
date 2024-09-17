@@ -9,7 +9,7 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoRepository;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -19,14 +19,14 @@ class TourInfoSharedServiceTest {
 
 	TourInfoSharedService tourInfoSharedService;
 
-	TourInfoRepository tourInfoRepository;
+	TourInfoMapper tourInfoMapper;
 
 	Instant now = Instant.now();
 
 	@BeforeEach
 	void setUp() {
-		this.tourInfoRepository = mock(TourInfoRepository.class);
-		this.tourInfoSharedService = new TourInfoSharedService(this.tourInfoRepository,
+		this.tourInfoMapper = mock(TourInfoMapper.class);
+		this.tourInfoSharedService = new TourInfoSharedService(this.tourInfoMapper,
 				Clock.fixed(now, ZoneId.of("Asia/Tokyo")));
 	}
 
@@ -34,7 +34,7 @@ class TourInfoSharedServiceTest {
 	void findOne01() {
 		TourInfo info = new TourInfo();
 
-		when(tourInfoRepository.findOneWithDetails("foo")).thenReturn(info);
+		when(tourInfoMapper.findOneWithDetails("foo")).thenReturn(info);
 
 		// run
 		TourInfo result = tourInfoSharedService.findOneWithDetails("foo");

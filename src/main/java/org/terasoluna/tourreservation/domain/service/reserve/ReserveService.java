@@ -27,10 +27,10 @@ import org.slf4j.Logger;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.domain.common.constants.MessageId;
+import org.terasoluna.tourreservation.domain.mapper.reserve.ReserveMapper;
 import org.terasoluna.tourreservation.domain.model.Reserve;
 import org.terasoluna.tourreservation.domain.model.ReserveBuilder;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.reserve.ReserveRepository;
 import org.terasoluna.tourreservation.domain.service.tourinfo.PriceCalculateOutput;
 import org.terasoluna.tourreservation.domain.service.tourinfo.PriceCalculateSharedService;
 import org.terasoluna.tourreservation.domain.service.tourinfo.TourInfoSharedService;
@@ -47,7 +47,7 @@ public class ReserveService {
 
 	private static final Logger log = getLogger(ReserveService.class);
 
-	private final ReserveRepository reserveRepository;
+	private final ReserveMapper reserveMapper;
 
 	private final AuthorizedReserveSharedService authorizedReserveSharedService;
 
@@ -57,10 +57,10 @@ public class ReserveService {
 
 	private final Clock clock;
 
-	public ReserveService(ReserveRepository reserveRepository,
-			AuthorizedReserveSharedService authorizedReserveSharedService, TourInfoSharedService tourInfoSharedService,
-			PriceCalculateSharedService priceCalculateService, Clock clock) {
-		this.reserveRepository = reserveRepository;
+	public ReserveService(ReserveMapper reserveMapper, AuthorizedReserveSharedService authorizedReserveSharedService,
+			TourInfoSharedService tourInfoSharedService, PriceCalculateSharedService priceCalculateService,
+			Clock clock) {
+		this.reserveMapper = reserveMapper;
 		this.authorizedReserveSharedService = authorizedReserveSharedService;
 		this.tourInfoSharedService = tourInfoSharedService;
 		this.priceCalculateService = priceCalculateService;
@@ -79,7 +79,7 @@ public class ReserveService {
 	}
 
 	public List<Reserve> findAllWithTourInfoByCustomer(String customerCode) {
-		List<Reserve> reserves = reserveRepository.findAllWithTourInfoByCustomer(customerCode);
+		List<Reserve> reserves = reserveMapper.findAllWithTourInfoByCustomer(customerCode);
 		return reserves;
 	}
 
@@ -98,7 +98,7 @@ public class ReserveService {
 		int reserveMember = input.getAdultCount() + input.getChildCount();
 		int aveRecMax = tourInfo.getAvaRecMax();
 		// retrieve the number of current reservations
-		Long sumCount = reserveRepository.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
+		Long sumCount = reserveMapper.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
 		if (sumCount == null) {
 			sumCount = 0L;
 		}
@@ -127,7 +127,7 @@ public class ReserveService {
 			.transfer(Reserve.NOT_TRANSFERED)
 			.build();
 
-		reserveRepository.insert(reserve);
+		reserveMapper.insert(reserve);
 		log.debug("reserved {}", reserve);
 
 		// * create output
@@ -162,9 +162,9 @@ public class ReserveService {
 
 		// cancel the reservation
 		// reserve = reserveRepository.findForUpdate(reserveNo); TODO
-		reserve = reserveRepository.findOneForUpdate(reserveNo);
+		reserve = reserveMapper.findOneForUpdate(reserveNo);
 		if (reserve != null) {
-			reserveRepository.deleteById(reserveNo);
+			reserveMapper.deleteById(reserveNo);
 		}
 		else {
 			ResultMessages message = ResultMessages.error().add(MessageId.E_TR_0003);
@@ -189,7 +189,7 @@ public class ReserveService {
 				input.getChildCount());
 
 		reserve.setSumPrice(price.getSumPrice());
-		reserveRepository.update(reserve);
+		reserveMapper.update(reserve);
 
 		ReservationUpdateOutput output = new ReservationUpdateOutput();
 		output.setReserve(reserve);

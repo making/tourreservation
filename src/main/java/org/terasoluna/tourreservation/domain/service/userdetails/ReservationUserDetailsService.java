@@ -16,7 +16,7 @@
 package org.terasoluna.tourreservation.domain.service.userdetails;
 
 import org.terasoluna.tourreservation.domain.model.Customer;
-import org.terasoluna.tourreservation.domain.repository.customer.CustomerRepository;
+import org.terasoluna.tourreservation.domain.mapper.customer.CustomerMapper;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,15 +26,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReservationUserDetailsService implements UserDetailsService {
 
-	private final CustomerRepository customerRepository;
+	private final CustomerMapper customerMapper;
 
-	public ReservationUserDetailsService(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
+	public ReservationUserDetailsService(CustomerMapper customerMapper) {
+		this.customerMapper = customerMapper;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Customer customer = customerRepository.findById(username).orElse(null);
+		Customer customer = customerMapper.findById(username).orElse(null);
 		if (customer == null) {
 			throw new UsernameNotFoundException(username + " is not found.");
 		}

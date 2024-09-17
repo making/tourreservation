@@ -13,16 +13,18 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.terasoluna.tourreservation.domain.repository.age;
+package org.terasoluna.tourreservation.domain.mapper.customer;
 
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.terasoluna.tourreservation.domain.model.Age;
+import org.terasoluna.tourreservation.domain.model.Customer;
 
 @Mapper
-public interface AgeRepository {
+public interface CustomerMapper {
 
-	Optional<Age> findById(String ageCode);
+	Optional<Customer> findById(String customerCode);
+
+	void insert(Customer customer);
 
 }

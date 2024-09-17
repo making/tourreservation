@@ -25,13 +25,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.TestcontainersConfiguration;
 import org.terasoluna.tourreservation.common.LegacyDate;
+import org.terasoluna.tourreservation.domain.mapper.reserve.ReserveMapper;
 import org.terasoluna.tourreservation.domain.model.Arrival;
 import org.terasoluna.tourreservation.domain.model.Customer;
 import org.terasoluna.tourreservation.domain.model.Departure;
 import org.terasoluna.tourreservation.domain.model.Reserve;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.reserve.ReserveRepository;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoRepository;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoMapper;
 import org.terasoluna.tourreservation.domain.service.userdetails.ReservationUserDetails;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -69,10 +69,10 @@ class ReserveServiceSecurityTest {
 	// Mock repository is define at the default bean definition file for this test case
 	// class.
 	@MockBean
-	ReserveRepository mockReserveRepository;
+	ReserveMapper mockReserveMapper;
 
 	@MockBean
-	TourInfoRepository tourInfoRepository;
+	TourInfoMapper tourInfoMapper;
 
 	@Autowired
 	ReserveService reserveService;
@@ -82,7 +82,7 @@ class ReserveServiceSecurityTest {
 
 	@BeforeEach
 	void resetMocks() {
-		reset(mockReserveRepository, tourInfoRepository);
+		reset(mockReserveMapper, tourInfoMapper);
 	}
 
 	@Test
@@ -171,7 +171,7 @@ class ReserveServiceSecurityTest {
 
 		// assert
 		{
-			verify(mockReserveRepository, times(1)).update(any(Reserve.class));
+			verify(mockReserveMapper, times(1)).update(any(Reserve.class));
 			assertThat(output.getReserve().getReserveNo()).isEqualTo("R000000001");
 			assertThat(output.getReserve().getCustomer().getCustomerCode()).isEqualTo(CUSTOMER_A);
 		}
@@ -204,7 +204,7 @@ class ReserveServiceSecurityTest {
 
 		// assert
 		{
-			verify(mockReserveRepository, never()).update(any(Reserve.class));
+			verify(mockReserveMapper, never()).update(any(Reserve.class));
 		}
 	}
 
@@ -224,7 +224,7 @@ class ReserveServiceSecurityTest {
 
 		// assert
 		{
-			verify(mockReserveRepository, times(1)).deleteById("R000000001");
+			verify(mockReserveMapper, times(1)).deleteById("R000000001");
 		}
 
 	}
@@ -251,18 +251,18 @@ class ReserveServiceSecurityTest {
 
 		// assert
 		{
-			verify(mockReserveRepository, never()).deleteById("R000000001");
+			verify(mockReserveMapper, never()).deleteById("R000000001");
 		}
 
 	}
 
 	/**
-	 * Set up return object of {@link ReserveRepository}'s method.
+	 * Set up return object of {@link ReserveMapper}'s method.
 	 * <p>
 	 * This method set up return object of following methods.
 	 * <ul>
-	 * <li>{@link ReserveRepository#findById}</li>
-	 * <li>{@link ReserveRepository#findOneForUpdate}</li>
+	 * <li>{@link ReserveMapper#findById}</li>
+	 * <li>{@link ReserveMapper#findOneForUpdate}</li>
 	 * </ul>
 	 * @param customerCode customer code of reservation owner
 	 * @param reserveNo reserve number of reservation
@@ -272,8 +272,8 @@ class ReserveServiceSecurityTest {
 		reserve.setCustomer(new Customer(customerCode));
 		reserve.setTourInfo(new TourInfo("01"));
 
-		when(mockReserveRepository.findById(reserveNo)).thenReturn(Optional.of(reserve));
-		when(mockReserveRepository.findOneForUpdate(reserveNo)).thenReturn(reserve);
+		when(mockReserveMapper.findById(reserveNo)).thenReturn(Optional.of(reserve));
+		when(mockReserveMapper.findOneForUpdate(reserveNo)).thenReturn(reserve);
 
 		TourInfo tourInfo = new TourInfo("01");
 		tourInfo.setDepDay(LegacyDate.fromLocalDate(LocalDate.now(clock).plusDays(8)));
@@ -281,7 +281,7 @@ class ReserveServiceSecurityTest {
 		tourInfo.setArrival(new Arrival());
 		reserve.setTourInfo(tourInfo);
 
-		when(tourInfoRepository.findOneWithDetails(tourInfo.getTourCode())).thenReturn(tourInfo);
+		when(tourInfoMapper.findOneWithDetails(tourInfo.getTourCode())).thenReturn(tourInfo);
 	}
 
 	@WithSecurityContext(factory = WithMockCustomerSecurityContextFactory.class)

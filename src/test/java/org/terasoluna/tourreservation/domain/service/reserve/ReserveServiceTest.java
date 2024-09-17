@@ -18,12 +18,12 @@ import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.LegacyDate;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.domain.common.constants.MessageId;
+import org.terasoluna.tourreservation.domain.mapper.reserve.ReserveMapper;
 import org.terasoluna.tourreservation.domain.model.Accommodation;
 import org.terasoluna.tourreservation.domain.model.Arrival;
 import org.terasoluna.tourreservation.domain.model.Departure;
 import org.terasoluna.tourreservation.domain.model.Reserve;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.reserve.ReserveRepository;
 import org.terasoluna.tourreservation.domain.service.tourinfo.PriceCalculateOutput;
 import org.terasoluna.tourreservation.domain.service.tourinfo.PriceCalculateSharedService;
 import org.terasoluna.tourreservation.domain.service.tourinfo.TourInfoSharedService;
@@ -41,7 +41,7 @@ class ReserveServiceTest {
 
 	ReserveService reserveService;
 
-	ReserveRepository reserveRepository;
+	ReserveMapper reserveMapper;
 
 	TourInfoSharedService tourInfoSharedService;
 
@@ -53,14 +53,14 @@ class ReserveServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		reserveRepository = mock(ReserveRepository.class);
+		reserveMapper = mock(ReserveMapper.class);
 		tourInfoSharedService = mock(TourInfoSharedService.class);
 		priceCalculateSerivce = mock(PriceCalculateSharedService.class);
 		now = Instant.now();
 		clock = Clock.fixed(now, ZoneId.systemDefault());
 		reserveService = ReserveServiceBuilder.reserveService()
-			.reserveRepository(reserveRepository)
-			.authorizedReserveSharedService(new AuthorizedReserveSharedService(reserveRepository))
+			.reserveMapper(reserveMapper)
+			.authorizedReserveSharedService(new AuthorizedReserveSharedService(reserveMapper))
 			.tourInfoSharedService(tourInfoSharedService)
 			.priceCalculateService(priceCalculateSerivce)
 			.clock(clock)
@@ -73,7 +73,7 @@ class ReserveServiceTest {
 		TourInfo tourInfo = new TourInfo();
 		tourInfo.setTourCode("XXXXXXXXXX");
 		reserve.setTourInfo(tourInfo);
-		when(reserveRepository.findById("foo")).thenReturn(Optional.of(reserve));
+		when(reserveMapper.findById("foo")).thenReturn(Optional.of(reserve));
 		when(tourInfoSharedService.findOneWithDetails("XXXXXXXXXX")).thenReturn(tourInfo);
 
 		Reserve result = reserveService.findOneWithTourInfo("foo");
@@ -82,7 +82,7 @@ class ReserveServiceTest {
 
 	@Test
 	void findOne02() {
-		when(reserveRepository.findById("foo")).thenReturn(Optional.empty());
+		when(reserveMapper.findById("foo")).thenReturn(Optional.empty());
 		when(tourInfoSharedService.findOneWithDetails(null)).thenReturn(null);
 
 		Reserve result = reserveService.findOneWithTourInfo("foo");
@@ -101,7 +101,7 @@ class ReserveServiceTest {
 		tour2.setTourDays(4);
 		List<Reserve> reserves = Arrays.asList(reserve1, reserve2);
 
-		when(reserveRepository.findAllWithTourInfoByCustomer("xxxx")).thenReturn(reserves);
+		when(reserveMapper.findAllWithTourInfoByCustomer("xxxx")).thenReturn(reserves);
 		when(tourInfoSharedService.isOverPaymentLimit(tour1)).thenReturn(false);
 		when(tourInfoSharedService.isOverPaymentLimit(tour2)).thenReturn(true);
 
@@ -113,7 +113,7 @@ class ReserveServiceTest {
 
 	@Test
 	void findByCustomerCode03() {
-		when(reserveRepository.findAllWithTourInfoByCustomer("xxxx")).thenReturn(new ArrayList<Reserve>());
+		when(reserveMapper.findAllWithTourInfoByCustomer("xxxx")).thenReturn(new ArrayList<Reserve>());
 		List<Reserve> result = reserveService.findAllWithTourInfoByCustomer("xxxx");
 		assertThat(result).isNotNull();
 		assertThat(result).isEmpty();
@@ -134,7 +134,7 @@ class ReserveServiceTest {
 		tour.setArrival(new Arrival());
 		when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 		when(tourInfoSharedService.findOneWithDetailsForUpdate("01")).thenReturn(tour);
-		when(reserveRepository.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(7L); // 1+2+7
+		when(reserveMapper.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(7L); // 1+2+7
 		// <=
 		// 10
 
@@ -154,7 +154,7 @@ class ReserveServiceTest {
 		ReserveTourOutput output = reserveService.reserve(input);
 
 		ArgumentCaptor<Reserve> capture = ArgumentCaptor.forClass(Reserve.class);
-		verify(reserveRepository, atLeast(1)).insert(capture.capture());
+		verify(reserveMapper, atLeast(1)).insert(capture.capture());
 
 		Reserve r = capture.getValue();
 		assertThat(output.getReserve()).isEqualTo(r);
@@ -187,7 +187,7 @@ class ReserveServiceTest {
 			tour.setAvaRecMax(10);
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.findOneWithDetailsForUpdate("01")).thenReturn(tour);
-			when(reserveRepository.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(7L); // 1+2+7
+			when(reserveMapper.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(7L); // 1+2+7
 			// <=
 			// 10
 
@@ -233,7 +233,7 @@ class ReserveServiceTest {
 			tour.setAvaRecMax(10);
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.findOneWithDetailsForUpdate("01")).thenReturn(tour);
-			when(reserveRepository.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(8L); // !!1+2+8
+			when(reserveMapper.countReservedPersonSumByTourInfo(tour.getTourCode())).thenReturn(8L); // !!1+2+8
 			// >
 			// 10
 
@@ -274,8 +274,8 @@ class ReserveServiceTest {
 		reserve.setTourInfo(tour);
 		reserve.setTransfer(Reserve.NOT_TRANSFERED);
 
-		when(reserveRepository.findById("001")).thenReturn(Optional.of(reserve));
-		when(reserveRepository.findOneForUpdate("001")).thenReturn(reserve);
+		when(reserveMapper.findById("001")).thenReturn(Optional.of(reserve));
+		when(reserveMapper.findOneForUpdate("001")).thenReturn(reserve);
 		when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 		when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(false); // within
 																				// limit
@@ -283,7 +283,7 @@ class ReserveServiceTest {
 		reserveService.cancel("001");
 
 		ArgumentCaptor<String> argOfDelete = ArgumentCaptor.forClass(String.class);
-		verify(reserveRepository, times(1)).deleteById(argOfDelete.capture());
+		verify(reserveMapper, times(1)).deleteById(argOfDelete.capture());
 
 		assertThat(argOfDelete.getValue()).isEqualTo("001");
 	}
@@ -299,8 +299,8 @@ class ReserveServiceTest {
 			reserve.setTourInfo(tour);
 			reserve.setTransfer(Reserve.TRANSFERED); // !!!TRANSFERED
 
-			when(reserveRepository.findById("001")).thenReturn(Optional.of(reserve));
-			when(reserveRepository.findOneForUpdate("001")).thenReturn(reserve);
+			when(reserveMapper.findById("001")).thenReturn(Optional.of(reserve));
+			when(reserveMapper.findOneForUpdate("001")).thenReturn(reserve);
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(false); // within
 			// limit
@@ -331,8 +331,8 @@ class ReserveServiceTest {
 			reserve.setTourInfo(tour);
 			reserve.setTransfer(Reserve.NOT_TRANSFERED);
 
-			when(reserveRepository.findById("001")).thenReturn(Optional.of(reserve));
-			when(reserveRepository.findOneForUpdate("001")).thenReturn(reserve);
+			when(reserveMapper.findById("001")).thenReturn(Optional.of(reserve));
+			when(reserveMapper.findOneForUpdate("001")).thenReturn(reserve);
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(true); // !!!over
 			// limit
@@ -363,12 +363,12 @@ class ReserveServiceTest {
 			reserve.setTourInfo(tour);
 			reserve.setTransfer(Reserve.NOT_TRANSFERED);
 
-			when(reserveRepository.findById("001")).thenReturn(Optional.of(reserve)).thenReturn(Optional.empty()); // !!!return
+			when(reserveMapper.findById("001")).thenReturn(Optional.of(reserve)).thenReturn(Optional.empty()); // !!!return
 			// null
 			// for
 			// second
 			// time
-			when(reserveRepository.findOneForUpdate("001")).thenReturn((Reserve) null); // return
+			when(reserveMapper.findOneForUpdate("001")).thenReturn((Reserve) null); // return
 			// null
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(false); // within
@@ -410,7 +410,7 @@ class ReserveServiceTest {
 		tour.setDepDay(LegacyDate.fromLocalDate(LocalDate.now(clock).plusDays(7)));
 		reserve.setTourInfo(tour);
 
-		when(reserveRepository.findById("foo")).thenReturn(Optional.of(reserve));
+		when(reserveMapper.findById("foo")).thenReturn(Optional.of(reserve));
 		when(tourInfoSharedService.findOneWithDetails("aaa")).thenReturn(tour);
 		// run
 		ReservationUpdateOutput output = reserveService.update(input);

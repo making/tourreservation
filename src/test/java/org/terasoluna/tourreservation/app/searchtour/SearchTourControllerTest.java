@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoSearchCriteria;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoSearchCriteria;
 import org.terasoluna.tourreservation.domain.service.tourinfo.TourInfoService;
 
 import org.springframework.core.MethodParameter;

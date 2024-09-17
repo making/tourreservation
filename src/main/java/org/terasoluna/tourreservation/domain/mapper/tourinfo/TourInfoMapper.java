@@ -13,31 +13,26 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.terasoluna.tourreservation.domain.repository.reserve;
+package org.terasoluna.tourreservation.domain.mapper.tourinfo;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.terasoluna.tourreservation.domain.model.Reserve;
+import org.apache.ibatis.annotations.Param;
+import org.terasoluna.tourreservation.domain.model.TourInfo;
+
+import org.springframework.data.domain.Pageable;
 
 @Mapper
-public interface ReserveRepository {
+public interface TourInfoMapper {
 
-	Optional<Reserve> findById(String reserveNo);
+	TourInfo findOneWithDetails(String tourCode);
 
-	void insert(Reserve reserve);
+	TourInfo findOneWithDetailsForUpdate(String tourCode);
 
-	void update(Reserve reserve);
+	List<TourInfo> findPageBySearchCriteria(@Param("criteria") TourInfoSearchCriteria criteria,
+			@Param("pageable") Pageable pageable);
 
-	void deleteById(String reserveNo);
-
-	Reserve findOneForUpdate(String reserveNo);
-
-	Reserve findOneWithDetail(String reserveNo);
-
-	Long countReservedPersonSumByTourInfo(String tourCode);
-
-	List<Reserve> findAllWithTourInfoByCustomer(String customerCode);
+	long countBySearchCriteria(@Param("criteria") TourInfoSearchCriteria criteria);
 
 }

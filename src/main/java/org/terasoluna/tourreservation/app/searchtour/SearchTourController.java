@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasoluna.tourreservation.common.LegacyDate;
 import org.terasoluna.tourreservation.domain.model.TourInfo;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoSearchCriteria;
-import org.terasoluna.tourreservation.domain.repository.tourinfo.TourInfoSearchCriteriaBuilder;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoSearchCriteria;
+import org.terasoluna.tourreservation.domain.mapper.tourinfo.TourInfoSearchCriteriaBuilder;
 import org.terasoluna.tourreservation.domain.service.tourinfo.TourInfoService;
 
 import org.springframework.data.domain.Page;
