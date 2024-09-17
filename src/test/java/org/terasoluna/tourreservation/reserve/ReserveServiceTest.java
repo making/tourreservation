@@ -18,21 +18,12 @@ import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.LegacyDate;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.message.BusinessMessageId;
-import org.terasoluna.tourreservation.reserve.AuthorizedReserveSharedService;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateInput;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateOutput;
-import org.terasoluna.tourreservation.reserve.ReserveMapper;
-import org.terasoluna.tourreservation.reserve.ReserveService;
-import org.terasoluna.tourreservation.reserve.ReserveServiceBuilder;
-import org.terasoluna.tourreservation.reserve.ReserveTourInput;
-import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
 import org.terasoluna.tourreservation.tour.Accommodation;
 import org.terasoluna.tourreservation.tour.Arrival;
 import org.terasoluna.tourreservation.tour.Departure;
-import org.terasoluna.tourreservation.reserve.Reserve;
-import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateSharedService;
+import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.TourInfoSharedService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -285,7 +276,7 @@ class ReserveServiceTest {
 		when(reserveMapper.findOneForUpdate("001")).thenReturn(reserve);
 		when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 		when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(false); // within
-																				// limit
+		// limit
 
 		reserveService.cancel("001");
 
@@ -375,7 +366,7 @@ class ReserveServiceTest {
 			// for
 			// second
 			// time
-			when(reserveMapper.findOneForUpdate("001")).thenReturn((Reserve) null); // return
+			when(reserveMapper.findOneForUpdate("001")).thenReturn(null); // return
 			// null
 			when(tourInfoSharedService.findOneWithDetails("01")).thenReturn(tour);
 			when(tourInfoSharedService.isOverPaymentLimit(tour)).thenReturn(false); // within

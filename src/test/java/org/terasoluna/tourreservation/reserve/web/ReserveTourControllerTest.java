@@ -17,11 +17,11 @@ package org.terasoluna.tourreservation.reserve.web;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.customer.Customer;
 import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
-import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;

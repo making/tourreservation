@@ -27,9 +27,9 @@ import org.slf4j.Logger;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.message.BusinessMessageId;
-import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateSharedService;
+import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.TourInfoSharedService;
 
 import org.springframework.stereotype.Service;

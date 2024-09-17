@@ -62,10 +62,7 @@ class SearchTourControllerTest {
 			.setCustomArgumentResolvers(new HandlerMethodArgumentResolver() {
 				@Override
 				public boolean supportsParameter(MethodParameter parameter) {
-					if (parameter.getParameterType().equals(Pageable.class)) {
-						return true;
-					}
-					return false;
+					return parameter.getParameterType().equals(Pageable.class);
 				}
 
 				@Override

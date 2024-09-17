@@ -25,16 +25,16 @@ import java.util.Locale;
 
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
+import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.LegacyDate;
 import org.terasoluna.tourreservation.customer.Customer;
-import org.terasoluna.tourreservation.reserve.Reserve;
-import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.customer.CustomerService;
+import org.terasoluna.tourreservation.reserve.Reserve;
 import org.terasoluna.tourreservation.reserve.ReserveService;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateSharedService;
+import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.TourInfoSharedService;
-import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -82,12 +82,9 @@ public class ManageReservationHelper {
 		if (days == 1) {
 			return this.messageSource.getMessage(LABEL_TR_MANAGERESERVATION_DAYTRIP, null, locale);
 		}
-		StringBuilder builder = new StringBuilder();
-		builder.append(days - 1);
-		builder.append(this.messageSource.getMessage(LABEL_TR_MANAGERESERVATION_NIGHT, null, locale));
-		builder.append(days);
-		builder.append(this.messageSource.getMessage(LABEL_TR_MANAGERESERVATION_DAY, null, locale));
-		return builder.toString();
+		String builder = (days - 1) + this.messageSource.getMessage(LABEL_TR_MANAGERESERVATION_NIGHT, null, locale)
+				+ days + this.messageSource.getMessage(LABEL_TR_MANAGERESERVATION_DAY, null, locale);
+		return builder;
 	}
 
 	public List<ReserveRowOutput> list(ReservationUserDetails userDetails) {

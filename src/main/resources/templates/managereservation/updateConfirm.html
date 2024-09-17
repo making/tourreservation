@@ -125,7 +125,8 @@
     <span th:utext="#{label.tr.managereservation.manageReservationConfirmMessage}"></span>
     <br/>
 
-    <form th:action="@{update}" th:object="${manageReservationForm}" id="manageReservationForm" class="inline" method="post">
+    <form th:action="@{update}" th:object="${manageReservationForm}" id="manageReservationForm" class="inline"
+          method="post">
         <input type="hidden" th:field="*{adultCount}"/>
         <input type="hidden" th:field="*{childCount}"/>
 

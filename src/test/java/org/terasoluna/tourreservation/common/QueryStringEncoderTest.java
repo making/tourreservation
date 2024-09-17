@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.reserve.web.ReserveTourForm;
-import org.terasoluna.tourreservation.reserve.web.ReserveTourFormBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.terasoluna.tourreservation.reserve.web.ReserveTourFormBuilder.reserveTourForm;

@@ -16,8 +16,8 @@
 package org.terasoluna.tourreservation.reserve.web;
 
 import org.terasoluna.tourreservation.customer.Customer;
-import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
+import org.terasoluna.tourreservation.tour.TourInfo;
 
 public class TourDetailOutput {
 

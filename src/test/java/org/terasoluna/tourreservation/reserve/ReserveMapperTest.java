@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.terasoluna.tourreservation.TestcontainersConfiguration;
 import org.terasoluna.tourreservation.common.LegacyDate;
-import org.terasoluna.tourreservation.reserve.Reserve;
-import org.terasoluna.tourreservation.reserve.ReserveMapper;
 import org.terasoluna.tourreservation.tour.TourInfo;
 import org.testcontainers.junit.jupiter.Testcontainers;
 

@@ -41,15 +41,18 @@
                     (<span th:text="#{label.tr.common.required}"></span>)
                 </label><br>
                 <select th:field="*{customerBirthYear}" id="customerBirthYear">
-                    <option th:each="year : ${@birthYearLabelCodeList.labelCodes()}" th:value="${year.code()}" th:text="${year.label()}"></option>
+                    <option th:each="year : ${@birthYearLabelCodeList.labelCodes()}" th:value="${year.code()}"
+                            th:text="${year.label()}"></option>
                 </select>
                 <span th:text="#{label.tr.common.year}"></span>
                 <select th:field="*{customerBirthMonth}">
-                    <option th:each="month : ${@monthLabelCodeList.labelCodes()}" th:value="${month.code()}" th:text="${month.label()}"></option>
+                    <option th:each="month : ${@monthLabelCodeList.labelCodes()}" th:value="${month.code()}"
+                            th:text="${month.label()}"></option>
                 </select>
                 <span th:text="#{label.tr.common.month}"></span>
                 <select th:field="*{customerBirthDay}">
-                    <option th:each="day : ${@dayOfMonthLabelCodeList.labelCodes()}" th:value="${day.code()}" th:text="${day.label()}"></option>
+                    <option th:each="day : ${@dayOfMonthLabelCodeList.labelCodes()}" th:value="${day.code()}"
+                            th:text="${day.label()}"></option>
                 </select>
                 <span th:text="#{label.tr.common.day}"></span>
             </p>

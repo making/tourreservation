@@ -17,9 +17,9 @@ package org.terasoluna.tourreservation.reserve.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
-import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

@@ -16,6 +16,7 @@
 package org.terasoluna.tourreservation.tour;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Output of Price Calculation.<br>
@@ -124,42 +125,37 @@ public class PriceCalculateOutput implements Serializable {
 	public boolean equals(final Object o) {
 		if (o == this)
 			return true;
-		if (!(o instanceof PriceCalculateOutput))
+		if (!(o instanceof PriceCalculateOutput other))
 			return false;
-		final PriceCalculateOutput other = (PriceCalculateOutput) o;
-		if (!other.canEqual((Object) this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$adultUnitPrice = this.getAdultUnitPrice();
 		final Object other$adultUnitPrice = other.getAdultUnitPrice();
-		if (this$adultUnitPrice == null ? other$adultUnitPrice != null
-				: !this$adultUnitPrice.equals(other$adultUnitPrice))
+		if (!Objects.equals(this$adultUnitPrice, other$adultUnitPrice))
 			return false;
 		final Object this$childUnitPrice = this.getChildUnitPrice();
 		final Object other$childUnitPrice = other.getChildUnitPrice();
-		if (this$childUnitPrice == null ? other$childUnitPrice != null
-				: !this$childUnitPrice.equals(other$childUnitPrice))
+		if (!Objects.equals(this$childUnitPrice, other$childUnitPrice))
 			return false;
 		final Object this$adultCount = this.getAdultCount();
 		final Object other$adultCount = other.getAdultCount();
-		if (this$adultCount == null ? other$adultCount != null : !this$adultCount.equals(other$adultCount))
+		if (!Objects.equals(this$adultCount, other$adultCount))
 			return false;
 		final Object this$childCount = this.getChildCount();
 		final Object other$childCount = other.getChildCount();
-		if (this$childCount == null ? other$childCount != null : !this$childCount.equals(other$childCount))
+		if (!Objects.equals(this$childCount, other$childCount))
 			return false;
 		final Object this$adultPrice = this.getAdultPrice();
 		final Object other$adultPrice = other.getAdultPrice();
-		if (this$adultPrice == null ? other$adultPrice != null : !this$adultPrice.equals(other$adultPrice))
+		if (!Objects.equals(this$adultPrice, other$adultPrice))
 			return false;
 		final Object this$childPrice = this.getChildPrice();
 		final Object other$childPrice = other.getChildPrice();
-		if (this$childPrice == null ? other$childPrice != null : !this$childPrice.equals(other$childPrice))
+		if (!Objects.equals(this$childPrice, other$childPrice))
 			return false;
 		final Object this$sumPrice = this.getSumPrice();
 		final Object other$sumPrice = other.getSumPrice();
-		if (this$sumPrice == null ? other$sumPrice != null : !this$sumPrice.equals(other$sumPrice))
-			return false;
-		return true;
+		return Objects.equals(this$sumPrice, other$sumPrice);
 	}
 
 	protected boolean canEqual(final Object other) {

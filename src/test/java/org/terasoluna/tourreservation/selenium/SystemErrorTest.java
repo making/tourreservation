@@ -15,11 +15,11 @@
  */
 package org.terasoluna.tourreservation.selenium;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.terasoluna.tourreservation.message.ScreenMessageId;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SystemErrorTest extends SeleniumTestSupport {
 

@@ -17,6 +17,7 @@ package org.terasoluna.tourreservation.tour;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
@@ -116,40 +117,37 @@ public class TourInfoSearchCriteria implements Serializable {
 	public boolean equals(final Object o) {
 		if (o == this)
 			return true;
-		if (!(o instanceof TourInfoSearchCriteria))
+		if (!(o instanceof TourInfoSearchCriteria other))
 			return false;
-		final TourInfoSearchCriteria other = (TourInfoSearchCriteria) o;
-		if (!other.canEqual((Object) this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$depDate = this.getDepDate();
 		final Object other$depDate = other.getDepDate();
-		if (this$depDate == null ? other$depDate != null : !this$depDate.equals(other$depDate))
+		if (!Objects.equals(this$depDate, other$depDate))
 			return false;
 		final Object this$tourDays = this.getTourDays();
 		final Object other$tourDays = other.getTourDays();
-		if (this$tourDays == null ? other$tourDays != null : !this$tourDays.equals(other$tourDays))
+		if (!Objects.equals(this$tourDays, other$tourDays))
 			return false;
 		final Object this$depCode = this.getDepCode();
 		final Object other$depCode = other.getDepCode();
-		if (this$depCode == null ? other$depCode != null : !this$depCode.equals(other$depCode))
+		if (!Objects.equals(this$depCode, other$depCode))
 			return false;
 		final Object this$arrCode = this.getArrCode();
 		final Object other$arrCode = other.getArrCode();
-		if (this$arrCode == null ? other$arrCode != null : !this$arrCode.equals(other$arrCode))
+		if (!Objects.equals(this$arrCode, other$arrCode))
 			return false;
 		final Object this$adultCount = this.getAdultCount();
 		final Object other$adultCount = other.getAdultCount();
-		if (this$adultCount == null ? other$adultCount != null : !this$adultCount.equals(other$adultCount))
+		if (!Objects.equals(this$adultCount, other$adultCount))
 			return false;
 		final Object this$childCount = this.getChildCount();
 		final Object other$childCount = other.getChildCount();
-		if (this$childCount == null ? other$childCount != null : !this$childCount.equals(other$childCount))
+		if (!Objects.equals(this$childCount, other$childCount))
 			return false;
 		final Object this$basePrice = this.getBasePrice();
 		final Object other$basePrice = other.getBasePrice();
-		if (this$basePrice == null ? other$basePrice != null : !this$basePrice.equals(other$basePrice))
-			return false;
-		return true;
+		return Objects.equals(this$basePrice, other$basePrice);
 	}
 
 	protected boolean canEqual(final Object other) {
