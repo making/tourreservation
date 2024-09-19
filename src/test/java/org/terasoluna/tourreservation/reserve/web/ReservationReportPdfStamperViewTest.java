@@ -30,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.terasoluna.tourreservation.reserve.web.ManageReservationHelper.DownloadPDFOutput;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -64,42 +65,44 @@ class ReservationReportPdfStamperViewTest {
 	@Test
 	void mergePdfDocument() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		DownloadPDFOutput downloadPDFOutput = new DownloadPDFOutput();
-		downloadPDFOutput.setReferenceName("TERASOLUNA TRAVEL CUSTOMER CENTER");
-		downloadPDFOutput.setReferenceEmail("customer@example.com");
-		downloadPDFOutput.setReferenceTel("01-2345-6789");
-		downloadPDFOutput.setPaymentMethod("Bank Transfer");
-		downloadPDFOutput.setPaymentAccount("Current Account：12345678");
-		downloadPDFOutput.setChildCount(3);
-		downloadPDFOutput.setTourName("【おすすめ】Terasolunaツアー(6泊7日)");
-		downloadPDFOutput.setAccomName("TERASOLUNAホテル第一荘");
-		downloadPDFOutput.setCustomerKana("キムラ　タロウ");
-		downloadPDFOutput.setCustomerTel("111-1111-1111");
-		downloadPDFOutput.setAdultUnitPrice(75000);
-		downloadPDFOutput.setConductor("Yes");
-		downloadPDFOutput.setTourAbs("そこは別天地、静寂と湯けむりの待つ宿へ… 詳しい情報はお取り合わせをお願い致します。");
-		downloadPDFOutput.setCustomerAdd("千葉県八千代市上高野");
-		downloadPDFOutput.setCustomerJob("プログラマ");
-		downloadPDFOutput.setTourDays("7");
-		downloadPDFOutput.setCustomerName("木村　太郎");
-		downloadPDFOutput.setChildUnitPrice(37500);
-		downloadPDFOutput.setDepName("北海道");
-		downloadPDFOutput.setArrName("北海道");
-		downloadPDFOutput.setCustomerMail("tarou@example.com");
-		downloadPDFOutput.setAdultCount(5);
-		downloadPDFOutput.setCustomerCode("00000001");
-		downloadPDFOutput.setReserveNo("00000001");
-		downloadPDFOutput.setRemarks("特になし");
-		downloadPDFOutput.setAccomTel("018-123-4567");
-		downloadPDFOutput.setCustomerPost("276-0022");
-		downloadPDFOutput.setAdultPrice(375000);
-		downloadPDFOutput.setChildPrice(112500);
-		downloadPDFOutput.setSumPrice(487500);
-		downloadPDFOutput.setPaymentTimeLimit("2019/03/24");
-		downloadPDFOutput.setReservedDay(sdf.parse("2019/02/21"));
-		downloadPDFOutput.setDepDay(sdf.parse("2019/03/31"));
-		downloadPDFOutput.setCustomerBirth(sdf.parse("1975/01/05"));
-		downloadPDFOutput.setPrintDay(sdf.parse("2019/03/06"));
+		DownloadPDFOutput downloadPDFOutput = DownloadPDFOutputBuilder.downloadPDFOutput()
+			.referenceName("TERASOLUNA TRAVEL CUSTOMER CENTER")
+			.referenceEmail("customer@example.com")
+			.referenceTel("01-2345-6789")
+			.paymentMethod("Bank Transfer")
+			.paymentCompanyName(null)
+			.paymentAccount("Current Account：12345678")
+			.childCount(3)
+			.tourName("【おすすめ】Terasolunaツアー(6泊7日)")
+			.accomName("TERASOLUNAホテル第一荘")
+			.customerKana("キムラ　タロウ")
+			.customerTel("111-1111-1111")
+			.adultUnitPrice(75000)
+			.reservedDay(sdf.parse("2019/02/21"))
+			.conductor("Yes")
+			.tourAbs("そこは別天地、静寂と湯けむりの待つ宿へ… 詳しい情報はお取り合わせをお願い致します。")
+			.customerAdd("千葉県八千代市上高野")
+			.customerJob("プログラマ")
+			.tourDays("7")
+			.depDay(sdf.parse("2019/03/31"))
+			.customerName("木村　太郎")
+			.childUnitPrice(37500)
+			.depName("北海道")
+			.customerBirth(sdf.parse("1975/01/05"))
+			.arrName("北海道")
+			.customerMail("tarou@example.com")
+			.adultCount(5)
+			.customerCode("00000001")
+			.reserveNo("00000001")
+			.remarks("特になし")
+			.accomTel("018-123-4567")
+			.customerPost("276-0022")
+			.printDay(sdf.parse("2019/03/06"))
+			.adultPrice(375000)
+			.childPrice(112500)
+			.sumPrice(487500)
+			.paymentTimeLimit("2019/03/24")
+			.build();
 
 		Map<String, Object> model = new HashMap<>();
 		model.put("downloadPDFOutput", downloadPDFOutput);
@@ -168,12 +171,44 @@ class ReservationReportPdfStamperViewTest {
 	@Test
 	void mergePdfDocumentDefaultFontsize() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		DownloadPDFOutput downloadPDFOutput = new DownloadPDFOutput();
-		downloadPDFOutput.setReferenceName("TERASOLUNA TRAVEL");
-		downloadPDFOutput.setReservedDay(sdf.parse("2019/02/21"));
-		downloadPDFOutput.setDepDay(sdf.parse("2019/03/31"));
-		downloadPDFOutput.setCustomerBirth(sdf.parse("1975/01/05"));
-		downloadPDFOutput.setPrintDay(sdf.parse("2019/03/06"));
+		DownloadPDFOutput downloadPDFOutput = DownloadPDFOutputBuilder.downloadPDFOutput()
+			.referenceName("TERASOLUNA TRAVEL")
+			.referenceEmail(null)
+			.referenceTel(null)
+			.paymentMethod(null)
+			.paymentCompanyName(null)
+			.paymentAccount(null)
+			.childCount(null)
+			.tourName(null)
+			.accomName(null)
+			.customerKana(null)
+			.customerTel(null)
+			.adultUnitPrice(null)
+			.reservedDay(sdf.parse("2019/02/21"))
+			.conductor(null)
+			.tourAbs(null)
+			.customerAdd(null)
+			.customerJob(null)
+			.tourDays(null)
+			.depDay(sdf.parse("2019/03/31"))
+			.customerName(null)
+			.childUnitPrice(null)
+			.depName(null)
+			.customerBirth(sdf.parse("1975/01/05"))
+			.arrName(null)
+			.customerMail(null)
+			.adultCount(null)
+			.customerCode(null)
+			.reserveNo(null)
+			.remarks(null)
+			.accomTel(null)
+			.customerPost(null)
+			.printDay(sdf.parse("2019/03/06"))
+			.adultPrice(null)
+			.childPrice(null)
+			.sumPrice(null)
+			.paymentTimeLimit(null)
+			.build();
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("downloadPDFOutput", downloadPDFOutput);

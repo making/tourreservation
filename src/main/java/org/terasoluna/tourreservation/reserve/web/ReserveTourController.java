@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
-import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
+import org.terasoluna.tourreservation.reserve.ReserveService;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -68,7 +68,7 @@ public class ReserveTourController {
 			@PathVariable("tourCode") String tourCode, ReserveTourForm form, Model model) {
 		log.debug("retrieve tour {}", tourCode);
 
-		TourDetailOutput output = reserveTourHelper.findTourDetail(userDetails, tourCode, form);
+		ReserveTourHelper.TourDetailOutput output = reserveTourHelper.findTourDetail(userDetails, tourCode, form);
 
 		model.addAttribute("output", output);
 
@@ -91,7 +91,7 @@ public class ReserveTourController {
 		}
 		log.debug("confirm the reservation details for the following tour {}", tourCode);
 
-		TourDetailOutput output = reserveTourHelper.findTourDetail(userDetails, tourCode, form);
+		ReserveTourHelper.TourDetailOutput output = reserveTourHelper.findTourDetail(userDetails, tourCode, form);
 		model.addAttribute("output", output);
 
 		return "reservetour/reserveConfirm";
@@ -115,7 +115,7 @@ public class ReserveTourController {
 		}
 
 		try {
-			ReserveTourOutput output = reserveTourHelper.reserve(userDetails, tourCode, form);
+			ReserveService.ReserveTourOutput output = reserveTourHelper.reserve(userDetails, tourCode, form);
 			redirectAttr.addFlashAttribute("output", output);
 		}
 		catch (BusinessException e) {

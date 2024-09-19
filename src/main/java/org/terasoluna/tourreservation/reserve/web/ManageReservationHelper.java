@@ -15,6 +15,7 @@
  */
 package org.terasoluna.tourreservation.reserve.web;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
@@ -50,6 +51,9 @@ import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MA
 import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MANAGERESERVATION_DAYTRIP;
 import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MANAGERESERVATION_DONE;
 import static org.terasoluna.tourreservation.message.ScreenMessageId.LABEL_TR_MANAGERESERVATION_NIGHT;
+import static org.terasoluna.tourreservation.reserve.web.DownloadPDFOutputBuilder.downloadPDFOutput;
+import static org.terasoluna.tourreservation.reserve.web.ReservationDetailOutputBuilder.reservationDetailOutput;
+import static org.terasoluna.tourreservation.reserve.web.ReserveRowOutputBuilder.reserveRowOutput;
 
 @Component
 @Builder(style = BuilderStyle.STAGED)
@@ -95,12 +99,11 @@ public class ManageReservationHelper {
 
 		List<ReserveRowOutput> rows = new ArrayList<>();
 		for (Reserve reservation : reserves) {
-			ReserveRowOutput reservationRowOutput = new ReserveRowOutput();
 			TourInfo tourInfo = reservation.getTourInfo();
-
-			reservationRowOutput.setLimitExceeding(tourInfoSharedService.isOverPaymentLimit(tourInfo));
-			reservationRowOutput.setTourDays(String.valueOf(tourInfo.getTourDays()));
-			reservationRowOutput.setReserve(reservation);
+			ReserveRowOutput reservationRowOutput = reserveRowOutput().reserve(reservation)
+				.limitExceeding(tourInfoSharedService.isOverPaymentLimit(tourInfo))
+				.tourDays(String.valueOf(tourInfo.getTourDays()))
+				.build();
 			rows.add(reservationRowOutput);
 		}
 		return rows;
@@ -116,25 +119,16 @@ public class ManageReservationHelper {
 	public ReservationDetailOutput findDetail(String reserveNo) {
 		Reserve reserve = reserveService.findOneWithTourInfo(reserveNo);
 		Customer customer = customerService.findOne(reserve.getCustomer().getCustomerCode());
-
 		TourInfo info = reserve.getTourInfo();
 		int adultCount = reserve.getAdultCount();
 		int childCount = reserve.getChildCount();
-
-		ReservationDetailOutput output = new ReservationDetailOutput();
-
 		PriceCalculateOutput price = priceCalculateService.calculatePrice(info.getBasePrice(), adultCount, childCount);
-		output.setPriceCalculateOutput(price);
-
-		// reserve related
-		output.setReserve(reserve);
-		output.setCustomer(customer);
-
-		// payment related
-		output.setPaymentTimeLimit(LegacyDate.fromLocalDate(info.getPaymentLimit()));
-		output.setLimitExceeding(tourInfoSharedService.isOverPaymentLimit(info));
-
-		return output;
+		return reservationDetailOutput().priceCalculateOutput(price)
+			.reserve(reserve)
+			.customer(customer)
+			.paymentTimeLimit(LegacyDate.fromLocalDate(info.getPaymentLimit()))
+			.limitExceeding(tourInfoSharedService.isOverPaymentLimit(info))
+			.build();
 
 	}
 
@@ -146,16 +140,15 @@ public class ManageReservationHelper {
 	public ReservationDetailOutput findDetail(String reserveNo, ManageReservationForm form) {
 		ReservationDetailOutput output = findDetail(reserveNo);
 		// re-calculate
-		TourInfo info = output.getReserve().getTourInfo();
+		TourInfo info = output.reserve().getTourInfo();
 		PriceCalculateOutput price = priceCalculateService.calculatePrice(info.getBasePrice(), form.getAdultCount(),
 				form.getChildCount());
-		output.setPriceCalculateOutput(price);
-		return output;
+		return ReservationDetailOutputBuilder.from(output).priceCalculateOutput(price).build();
 	}
 
 	public DownloadPDFOutput createPDF(String reserveNo, Locale locale) {
 		ReservationDetailOutput reserveDetailOutput = findDetail(reserveNo);
-		Reserve reserve = reserveDetailOutput.getReserve();
+		Reserve reserve = reserveDetailOutput.reserve();
 		TourInfo tourInfo = reserve.getTourInfo();
 
 		String paymentTimeLimit;
@@ -165,64 +158,78 @@ public class ManageReservationHelper {
 		else {
 			SimpleDateFormat sdf = new SimpleDateFormat(
 					this.messageSource.getMessage(LABEL_TR_COMMON_DATEPATTERN, null, locale));
-			paymentTimeLimit = sdf.format(reserveDetailOutput.getPaymentTimeLimit());
+			paymentTimeLimit = sdf.format(reserveDetailOutput.paymentTimeLimit());
 		}
-
-		DownloadPDFOutput downloadPDFOutput = new DownloadPDFOutput();
-		downloadPDFOutput.setReserveNo(reserveNo);
-		downloadPDFOutput.setTourName(tourInfo.getTourName());
-		downloadPDFOutput.setReservedDay(reserve.getReservedDay());
-		downloadPDFOutput.setDepDay(tourInfo.getDepDay());
-
-		downloadPDFOutput.setTourDays(String.valueOf(tourInfo.getTourDays()));
-		downloadPDFOutput.setDepName(tourInfo.getDeparture().getDepName());
-		downloadPDFOutput.setArrName(tourInfo.getArrival().getArrName());
-		downloadPDFOutput.setConductor(tourInfo.getConductor());
-		downloadPDFOutput.setAccomName(tourInfo.getAccommodation().getAccomName());
-		downloadPDFOutput.setAccomTel(tourInfo.getAccommodation().getAccomTel());
-		downloadPDFOutput.setTourAbs(tourInfo.getTourAbs());
-		downloadPDFOutput.setAdultCount(reserve.getAdultCount());
-		downloadPDFOutput.setChildCount(reserve.getChildCount());
-		downloadPDFOutput.setRemarks(reserve.getRemarks());
-		downloadPDFOutput.setPaymentMethod(this.messageSource.getMessage(LABEL_TR_COMMON_BANKTRANSFER, null, locale));
-		downloadPDFOutput
-			.setPaymentCompanyName(this.messageSource.getMessage(LABEL_TR_COMMON_PAYMENTCOMPANYNAME, null, locale));
-		downloadPDFOutput
-			.setPaymentAccount(this.messageSource.getMessage(LABEL_TR_COMMON_SAVINGSACCOUNT, null, locale));
-		downloadPDFOutput.setPaymentTimeLimit(paymentTimeLimit);
 
 		// calculate price
 		PriceCalculateOutput priceCalcResult = this.priceCalculateService.calculatePrice(tourInfo.getBasePrice(),
 				reserve.getAdultCount(), reserve.getChildCount());
 
-		// set price information
-		downloadPDFOutput.setAdultUnitPrice(priceCalcResult.getAdultUnitPrice());
-		downloadPDFOutput.setChildUnitPrice(priceCalcResult.getChildUnitPrice());
-		downloadPDFOutput.setAdultPrice(priceCalcResult.getAdultPrice());
-		downloadPDFOutput.setChildPrice(priceCalcResult.getChildPrice());
-		downloadPDFOutput.setSumPrice(priceCalcResult.getSumPrice());
-
 		// set customer information
-		Customer customer = reserveDetailOutput.getCustomer();
-		downloadPDFOutput.setCustomerCode(customer.getCustomerCode());
-		downloadPDFOutput.setCustomerKana(customer.getCustomerKana());
-		downloadPDFOutput.setCustomerName(customer.getCustomerName());
-		downloadPDFOutput.setCustomerBirth(customer.getCustomerBirth());
-		downloadPDFOutput.setCustomerJob(customer.getCustomerJob());
-		downloadPDFOutput.setCustomerMail(customer.getCustomerMail());
-		downloadPDFOutput.setCustomerTel(customer.getCustomerTel());
-		downloadPDFOutput.setCustomerPost(customer.getCustomerPost());
-		downloadPDFOutput.setCustomerAdd(customer.getCustomerAdd());
+		Customer customer = reserveDetailOutput.customer();
 
-		// set reference information
-		downloadPDFOutput.setReferenceName(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYNAME, null, locale));
-		downloadPDFOutput.setReferenceEmail(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYEMAIL, null, locale));
-		downloadPDFOutput.setReferenceTel(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYTEL, null, locale));
+		return downloadPDFOutput()
+			.referenceName(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYNAME, null, locale))
+			.referenceEmail(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYEMAIL, null, locale))
+			.referenceTel(this.messageSource.getMessage(LABEL_TR_COMMON_COMPANYTEL, null, locale))
+			.paymentMethod(this.messageSource.getMessage(LABEL_TR_COMMON_BANKTRANSFER, null, locale))
+			.paymentCompanyName(this.messageSource.getMessage(LABEL_TR_COMMON_PAYMENTCOMPANYNAME, null, locale))
+			.paymentAccount(this.messageSource.getMessage(LABEL_TR_COMMON_SAVINGSACCOUNT, null, locale))
+			.childCount(reserve.getChildCount())
+			.tourName(tourInfo.getTourName())
+			.accomName(tourInfo.getAccommodation().getAccomName())
+			.customerKana(customer.getCustomerKana())
+			.customerTel(customer.getCustomerTel())
+			.adultUnitPrice(priceCalcResult.getAdultUnitPrice())
+			.reservedDay(reserve.getReservedDay())
+			.conductor(tourInfo.getConductor())
+			.tourAbs(tourInfo.getTourAbs())
+			.customerAdd(customer.getCustomerAdd())
+			.customerJob(customer.getCustomerJob())
+			.tourDays(String.valueOf(tourInfo.getTourDays()))
+			.depDay(tourInfo.getDepDay())
+			.customerName(customer.getCustomerName())
+			.childUnitPrice(priceCalcResult.getChildUnitPrice())
+			.depName(tourInfo.getDeparture().getDepName())
+			.customerBirth(customer.getCustomerBirth())
+			.arrName(tourInfo.getArrival().getArrName())
+			.customerMail(customer.getCustomerMail())
+			.adultCount(reserve.getAdultCount())
+			.customerCode(customer.getCustomerCode())
+			.reserveNo(reserveNo)
+			.remarks(reserve.getRemarks())
+			.accomTel(tourInfo.getAccommodation().getAccomTel())
+			.customerPost(customer.getCustomerPost())
+			.printDay(Date.from(Instant.now(this.clock)))
+			.adultPrice(priceCalcResult.getAdultPrice())
+			.childPrice(priceCalcResult.getChildPrice())
+			.sumPrice(priceCalcResult.getSumPrice())
+			.paymentTimeLimit(paymentTimeLimit)
+			.build();
+	}
 
-		// set print date
-		downloadPDFOutput.setPrintDay(Date.from(Instant.now(this.clock)));
+	@Builder(style = BuilderStyle.STAGED, toBuilder = "from")
+	public record ReservationDetailOutput(PriceCalculateOutput priceCalculateOutput, Reserve reserve, Customer customer,
+			Date paymentTimeLimit, Boolean limitExceeding) {
 
-		return downloadPDFOutput;
+	}
+
+	@Builder(style = BuilderStyle.STAGED)
+	public record ReserveRowOutput(Reserve reserve, Boolean limitExceeding, String tourDays) {
+	}
+
+	/**
+	 * Output of Price Calculation.<br>
+	 */
+	@Builder(style = BuilderStyle.STAGED)
+	public record DownloadPDFOutput(String referenceName, String referenceEmail, String referenceTel,
+			String paymentMethod, String paymentCompanyName, String paymentAccount, Integer childCount, String tourName,
+			String accomName, String customerKana, String customerTel, Integer adultUnitPrice, Date reservedDay,
+			String conductor, String tourAbs, String customerAdd, String customerJob, String tourDays, Date depDay,
+			String customerName, Integer childUnitPrice, String depName, Date customerBirth, String arrName,
+			String customerMail, Integer adultCount, String customerCode, String reserveNo, String remarks,
+			String accomTel, String customerPost, Date printDay, Integer adultPrice, Integer childPrice,
+			Integer sumPrice, String paymentTimeLimit) implements Serializable {
 	}
 
 }

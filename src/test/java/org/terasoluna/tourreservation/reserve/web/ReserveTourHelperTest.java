@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.customer.Customer;
 import org.terasoluna.tourreservation.reserve.ReserveService;
-import org.terasoluna.tourreservation.reserve.ReserveTourInput;
-import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
 import org.terasoluna.tourreservation.tour.Accommodation;
 import org.terasoluna.tourreservation.tour.Arrival;
 import org.terasoluna.tourreservation.tour.Departure;
@@ -37,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.terasoluna.tourreservation.reserve.ReserveTourOutputBuilder.reserveTourOutput;
 import static org.terasoluna.tourreservation.reserve.web.ReserveTourHelperBuilder.reserveTourHelper;
 
 class ReserveTourHelperTest {
@@ -116,12 +115,12 @@ class ReserveTourHelperTest {
 		form.setChildCount(2);
 
 		// run
-		TourDetailOutput resultOutput = reserveHelper.findTourDetail(userDetails, tourCode, form);
+		ReserveTourHelper.TourDetailOutput resultOutput = reserveHelper.findTourDetail(userDetails, tourCode, form);
 
 		// assert
-		assertThat(resultOutput.getCustomer()).isEqualTo(customer);
-		assertThat(resultOutput.getPriceCalculateOutput()).isEqualTo(priceCalculateOutput);
-		assertThat(resultOutput.getTourInfo()).isEqualTo(tourInfo);
+		assertThat(resultOutput.customer()).isEqualTo(customer);
+		assertThat(resultOutput.priceCalculateOutput()).isEqualTo(priceCalculateOutput);
+		assertThat(resultOutput.tourInfo()).isEqualTo(tourInfo);
 	}
 
 	@Test
@@ -135,23 +134,28 @@ class ReserveTourHelperTest {
 		form.setChildCount(2);
 
 		// run
-		TourDetailOutput resultOutput = reserveHelper.findTourDetail(null, tourCode, form);
+		ReserveTourHelper.TourDetailOutput resultOutput = reserveHelper.findTourDetail(null, tourCode, form);
 
 		// assert
-		assertThat(resultOutput.getCustomer()).isNull();
-		assertThat(resultOutput.getPriceCalculateOutput()).isEqualTo(priceCalculateOutput);
-		assertThat(resultOutput.getTourInfo()).isEqualTo(tourInfo);
+		assertThat(resultOutput.customer()).isNull();
+		assertThat(resultOutput.priceCalculateOutput()).isEqualTo(priceCalculateOutput);
+		assertThat(resultOutput.tourInfo()).isEqualTo(tourInfo);
 	}
 
 	@Test
 	void reserve01() {
 
 		ReserveTourForm form = new ReserveTourForm();
-		ReserveTourOutput output = new ReserveTourOutput();
-		when(reserveService.reserve(any(ReserveTourInput.class))).thenReturn(output);
+		ReserveService.ReserveTourOutput output = reserveTourOutput().priceCalculateOutput(null)
+			.reserve(null)
+			.customer(null)
+			.tourInfo(null)
+			.paymentTimeLimit(null)
+			.build();
+		when(reserveService.reserve(any(ReserveService.ReserveTourInput.class))).thenReturn(output);
 
 		// run
-		ReserveTourOutput result = reserveHelper.reserve(userDetails, "123", form);
+		ReserveService.ReserveTourOutput result = reserveHelper.reserve(userDetails, "123", form);
 
 		// assert
 		assertThat(result).isEqualTo(output);

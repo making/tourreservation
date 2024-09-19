@@ -22,9 +22,6 @@ import org.jilt.Builder;
 import org.jilt.BuilderStyle;
 import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateInput;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateInputBuilder;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateOutput;
 import org.terasoluna.tourreservation.reserve.Reserve;
 import org.terasoluna.tourreservation.reserve.ReserveService;
 
@@ -41,6 +38,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import static org.terasoluna.tourreservation.reserve.ReservationUpdateInputBuilder.reservationUpdateInput;
 
 @Controller
 @RequestMapping(value = "reservations")
@@ -77,7 +76,7 @@ public class ManageReservationController {
 	 */
 	@GetMapping("me")
 	public String list(@AuthenticationPrincipal ReservationUserDetails userDetails, Model model) {
-		List<ReserveRowOutput> rows = manageReservationHelper.list(userDetails);
+		List<ManageReservationHelper.ReserveRowOutput> rows = manageReservationHelper.list(userDetails);
 
 		model.addAttribute("rows", rows);
 		return "managereservation/list";
@@ -91,7 +90,7 @@ public class ManageReservationController {
 	 */
 	@GetMapping("{reserveNo}")
 	public String detailForm(@PathVariable("reserveNo") String reserveNo, Model model) {
-		ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo);
+		ManageReservationHelper.ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo);
 		model.addAttribute("output", output);
 		return "managereservation/detailForm";
 	}
@@ -143,7 +142,7 @@ public class ManageReservationController {
 		if (result.hasErrors()) {
 			return updateRedo(reserveNo, form, model);
 		}
-		ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo, form);
+		ManageReservationHelper.ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo, form);
 		model.addAttribute("output", output);
 		return "managereservation/updateConfirm";
 	}
@@ -160,12 +159,11 @@ public class ManageReservationController {
 		if (result.hasErrors()) {
 			return updateRedo(reserveNo, form, model);
 		}
-		ReservationUpdateInput input = ReservationUpdateInputBuilder.reservationUpdateInput()
-			.reserveNo(reserveNo)
+		ReserveService.ReservationUpdateInput input = reservationUpdateInput().reserveNo(reserveNo)
 			.adultCount(form.getAdultCount())
 			.childCount(form.getChildCount())
 			.build();
-		ReservationUpdateOutput output = reserveService.update(input);
+		ReserveService.ReservationUpdateOutput output = reserveService.update(input);
 		redirectAttr.addFlashAttribute("output", output);
 		return "redirect:/reservations/{reserveNo}/update?complete";
 	}
@@ -186,7 +184,7 @@ public class ManageReservationController {
 
 	@GetMapping("{reserveNo}/cancel")
 	public String cancelConfirm(@PathVariable("reserveNo") String reserveNo, Model model) {
-		ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo);
+		ManageReservationHelper.ReservationDetailOutput output = manageReservationHelper.findDetail(reserveNo);
 		model.addAttribute("output", output);
 		return "managereservation/cancelConfirm";
 	}
@@ -220,7 +218,8 @@ public class ManageReservationController {
 
 	@GetMapping(path = "{reserveNo}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
 	public String downloadPDF(@PathVariable("reserveNo") String reserveNo, Model model, Locale locale) {
-		DownloadPDFOutput downloadPDFOutput = manageReservationHelper.createPDF(reserveNo, locale);
+		ManageReservationHelper.DownloadPDFOutput downloadPDFOutput = manageReservationHelper.createPDF(reserveNo,
+				locale);
 		model.addAttribute("downloadPDFOutput", downloadPDFOutput);
 		model.addAttribute("downloadPDFName", reservationReportPdfName);
 		return "reservationReportPdfStamperView";

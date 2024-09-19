@@ -26,8 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateInput;
-import org.terasoluna.tourreservation.reserve.ReservationUpdateOutput;
 import org.terasoluna.tourreservation.reserve.Reserve;
 import org.terasoluna.tourreservation.reserve.ReserveService;
 
@@ -50,7 +48,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.terasoluna.tourreservation.reserve.ReservationUpdateOutputBuilder.reservationUpdateOutput;
+import static org.terasoluna.tourreservation.reserve.web.DownloadPDFOutputBuilder.downloadPDFOutput;
 import static org.terasoluna.tourreservation.reserve.web.ManageReservationControllerBuilder.manageReservationController;
+import static org.terasoluna.tourreservation.reserve.web.ReservationDetailOutputBuilder.reservationDetailOutput;
 
 class ManageReservationControllerTest {
 
@@ -105,7 +106,12 @@ class ManageReservationControllerTest {
 		MockHttpServletRequestBuilder getRequest = get("/reservations/123");
 
 		// Set mock behavior for helper method
-		when(manageReservationHelper.findDetail("123")).thenReturn(new ReservationDetailOutput());
+		when(manageReservationHelper.findDetail("123")).thenReturn(reservationDetailOutput().priceCalculateOutput(null)
+			.reserve(null)
+			.customer(null)
+			.paymentTimeLimit(null)
+			.limitExceeding(null)
+			.build());
 
 		ResultActions results = mockMvc.perform(getRequest);
 		results.andExpect(status().isOk());
@@ -150,7 +156,12 @@ class ManageReservationControllerTest {
 
 		// Set mock behavior for helper method
 		when(manageReservationHelper.findDetail(eq("123"), any(ManageReservationForm.class)))
-			.thenReturn(new ReservationDetailOutput());
+			.thenReturn(reservationDetailOutput().priceCalculateOutput(null)
+				.reserve(null)
+				.customer(null)
+				.paymentTimeLimit(null)
+				.limitExceeding(null)
+				.build());
 
 		// Set form data to pass @Validated check
 		postRequest.formField("reserveNo", "123");
@@ -190,7 +201,8 @@ class ManageReservationControllerTest {
 		MockHttpServletRequestBuilder postRequest = post("/reservations/123/update");
 
 		// Set mock behavior for helper method
-		when(reserveService.update(any(ReservationUpdateInput.class))).thenReturn(new ReservationUpdateOutput());
+		when(reserveService.update(any(ReserveService.ReservationUpdateInput.class))).thenReturn(
+				reservationUpdateOutput().priceCalculateOutput(null).reserve(null).paymentTimeLimit(null).build());
 
 		// Set form data to pass @Validated check
 		postRequest.formField("reserveNo", "123");
@@ -248,7 +260,44 @@ class ManageReservationControllerTest {
 		Map<String, String> clExistenceMap = new LinkedHashMap<>();
 		clExistenceMap.put("0", "No");
 		clExistenceMap.put("1", "Yes");
-		when(manageReservationHelper.createPDF("123", Locale.ENGLISH)).thenReturn(new DownloadPDFOutput());
+		when(manageReservationHelper.createPDF("123", Locale.ENGLISH))
+			.thenReturn(downloadPDFOutput().referenceName(null)
+				.referenceEmail(null)
+				.referenceTel(null)
+				.paymentMethod(null)
+				.paymentCompanyName(null)
+				.paymentAccount(null)
+				.childCount(null)
+				.tourName(null)
+				.accomName(null)
+				.customerKana(null)
+				.customerTel(null)
+				.adultUnitPrice(null)
+				.reservedDay(null)
+				.conductor(null)
+				.tourAbs(null)
+				.customerAdd(null)
+				.customerJob(null)
+				.tourDays(null)
+				.depDay(null)
+				.customerName(null)
+				.childUnitPrice(null)
+				.depName(null)
+				.customerBirth(null)
+				.arrName(null)
+				.customerMail(null)
+				.adultCount(null)
+				.customerCode(null)
+				.reserveNo(null)
+				.remarks(null)
+				.accomTel(null)
+				.customerPost(null)
+				.printDay(null)
+				.adultPrice(null)
+				.childPrice(null)
+				.sumPrice(null)
+				.paymentTimeLimit(null)
+				.build());
 
 		// No Logic testing here
 		// this will just test the request mapping part
@@ -308,7 +357,12 @@ class ManageReservationControllerTest {
 		MockHttpServletRequestBuilder postRequest = get("/reservations/123/cancel").param("confirm", "");
 
 		// Set mock behavior for helper method
-		when(manageReservationHelper.findDetail("123")).thenReturn(new ReservationDetailOutput());
+		when(manageReservationHelper.findDetail("123")).thenReturn(reservationDetailOutput().priceCalculateOutput(null)
+			.reserve(null)
+			.customer(null)
+			.paymentTimeLimit(null)
+			.limitExceeding(null)
+			.build());
 
 		ResultActions results = mockMvc.perform(postRequest);
 		results.andExpect(status().isOk());
@@ -335,7 +389,12 @@ class ManageReservationControllerTest {
 		MockHttpServletRequestBuilder postRequest = post("/reservations/123/cancel");
 		// Set mock behavior for service and helper method
 		doThrow(new BusinessException(ResultMessages.error())).when(reserveService).cancel("123");
-		when(manageReservationHelper.findDetail("123")).thenReturn(new ReservationDetailOutput());
+		when(manageReservationHelper.findDetail("123")).thenReturn(reservationDetailOutput().priceCalculateOutput(null)
+			.reserve(null)
+			.customer(null)
+			.paymentTimeLimit(null)
+			.limitExceeding(null)
+			.build());
 
 		ResultActions results = mockMvc.perform(postRequest);
 		results.andExpect(status().isOk());

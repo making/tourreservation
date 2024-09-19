@@ -21,7 +21,7 @@ import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
 import org.terasoluna.tourreservation.customer.Customer;
-import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
+import org.terasoluna.tourreservation.reserve.ReserveTourOutputBuilder;
 
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.terasoluna.tourreservation.reserve.web.TourDetailOutputBuilder.tourDetailOutput;
 
 class ReserveTourControllerTest {
 
@@ -78,7 +79,7 @@ class ReserveTourControllerTest {
 
 		// Set mock behavior for helper method
 		when(reserveTourHelper.findTourDetail(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new TourDetailOutput());
+			.thenReturn(tourDetailOutput().tourInfo(null).priceCalculateOutput(null).build());
 
 		ResultActions results = mockMvc.perform(getRequest);
 		results.andExpect(status().isOk());
@@ -97,7 +98,7 @@ class ReserveTourControllerTest {
 
 		// Set mock behavior for helper method
 		when(reserveTourHelper.findTourDetail(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new TourDetailOutput());
+			.thenReturn(tourDetailOutput().tourInfo(null).priceCalculateOutput(null).build());
 
 		ResultActions results = mockMvc.perform(getRequest);
 		results.andExpect(status().isOk());
@@ -116,7 +117,7 @@ class ReserveTourControllerTest {
 
 		// Set mock behavior for helper method
 		when(reserveTourHelper.findTourDetail(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new TourDetailOutput());
+			.thenReturn(tourDetailOutput().tourInfo(null).priceCalculateOutput(null).build());
 
 		// Set form data
 		postRequest.param("adultCount", "2");
@@ -139,7 +140,7 @@ class ReserveTourControllerTest {
 
 		// Set mock behavior for helper method
 		when(reserveTourHelper.findTourDetail(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new TourDetailOutput());
+			.thenReturn(tourDetailOutput().tourInfo(null).priceCalculateOutput(null).build());
 
 		ResultActions results = mockMvc.perform(postRequest);
 		results.andExpect(status().isOk());
@@ -158,7 +159,13 @@ class ReserveTourControllerTest {
 
 		// Set mock behavior for helper method
 		when(reserveTourHelper.reserve(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new ReserveTourOutput());
+			.thenReturn(ReserveTourOutputBuilder.reserveTourOutput()
+				.priceCalculateOutput(null)
+				.reserve(null)
+				.customer(null)
+				.tourInfo(null)
+				.paymentTimeLimit(null)
+				.build());
 
 		postRequest.param("adultCount", "2");
 		postRequest.param("childCount", "2");
@@ -181,7 +188,7 @@ class ReserveTourControllerTest {
 		when(reserveTourHelper.reserve(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
 			.thenThrow(new BusinessException(ResultMessages.error()));
 		when(reserveTourHelper.findTourDetail(any(ReservationUserDetails.class), eq("123"), any(ReserveTourForm.class)))
-			.thenReturn(new TourDetailOutput());
+			.thenReturn(tourDetailOutput().tourInfo(null).priceCalculateOutput(null).build());
 
 		// Set form data
 		postRequest.param("adultCount", "2");

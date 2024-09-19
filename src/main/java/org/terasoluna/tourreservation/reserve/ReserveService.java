@@ -26,6 +26,7 @@ import org.jilt.BuilderStyle;
 import org.slf4j.Logger;
 import org.terasoluna.tourreservation.common.BusinessException;
 import org.terasoluna.tourreservation.common.ResultMessages;
+import org.terasoluna.tourreservation.customer.Customer;
 import org.terasoluna.tourreservation.message.BusinessMessageId;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateSharedService;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.terasoluna.tourreservation.reserve.ReservationUpdateOutputBuilder.reservationUpdateOutput;
+import static org.terasoluna.tourreservation.reserve.ReserveTourOutputBuilder.reserveTourOutput;
 
 @Transactional
 @Service
@@ -81,7 +84,7 @@ public class ReserveService {
 	}
 
 	public ReserveTourOutput reserve(ReserveTourInput input) throws BusinessException {
-		TourInfo tourInfo = tourInfoSharedService.findOneWithDetailsForUpdate(input.getTourCode());
+		TourInfo tourInfo = tourInfoSharedService.findOneWithDetailsForUpdate(input.tourCode());
 		LocalDate today = LocalDate.now(this.clock);
 
 		// * check date
@@ -92,7 +95,7 @@ public class ReserveService {
 		}
 
 		// * check vacancy
-		int reserveMember = input.getAdultCount() + input.getChildCount();
+		int reserveMember = input.adultCount() + input.childCount();
 		int aveRecMax = tourInfo.getAvaRecMax();
 		// retrieve the number of current reservations
 		Long sumCount = reserveMapper.countReservedPersonSumByTourInfo(tourInfo.getTourCode());
@@ -111,13 +114,13 @@ public class ReserveService {
 
 		// * reserve
 		PriceCalculateOutput priceCalculateOutput = priceCalculateService.calculatePrice(tourInfo.getBasePrice(),
-				input.getAdultCount(), input.getChildCount());
+				input.adultCount(), input.childCount());
 
 		Reserve reserve = ReserveBuilder.reserve()
-			.adultCount(input.getAdultCount())
-			.childCount(input.getChildCount())
-			.remarks(input.getRemarks())
-			.customer(input.getCustomer())
+			.adultCount(input.adultCount())
+			.childCount(input.childCount())
+			.remarks(input.remarks())
+			.customer(input.customer())
 			.tourInfo(tourInfo)
 			.sumPrice(priceCalculateOutput.getSumPrice())
 			.reservedDay(Date.from(today.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()))
@@ -127,15 +130,12 @@ public class ReserveService {
 		reserveMapper.insert(reserve);
 		log.debug("reserved {}", reserve);
 
-		// * create output
-		ReserveTourOutput tourReserveOutput = new ReserveTourOutput();
-		tourReserveOutput.setPriceCalculateOutput(priceCalculateOutput);
-		tourReserveOutput.setReserve(reserve);
-		tourReserveOutput.setTourInfo(tourInfo);
-		tourReserveOutput.setPaymentTimeLimit(tourInfo.getPaymentLimit());
-		tourReserveOutput.setCustomer(input.getCustomer());
-
-		return tourReserveOutput;
+		return reserveTourOutput().priceCalculateOutput(priceCalculateOutput)
+			.reserve(reserve)
+			.customer(input.customer())
+			.tourInfo(tourInfo)
+			.paymentTimeLimit(tourInfo.getPaymentLimit())
+			.build();
 	}
 
 	public void cancel(String reserveNo) throws BusinessException {
@@ -171,29 +171,70 @@ public class ReserveService {
 	}
 
 	public ReservationUpdateOutput update(ReservationUpdateInput input) throws BusinessException {
-		Reserve found = findOneWithTourInfo(input.getReserveNo());
+		Reserve found = findOneWithTourInfo(input.reserveNo());
 		ReserveBuilder reserveBuilder = ReserveBuilder.from(found);
-		if (input.getAdultCount() != null) {
-			reserveBuilder.adultCount(input.getAdultCount());
+		if (input.adultCount() != null) {
+			reserveBuilder.adultCount(input.adultCount());
 		}
-		if (input.getChildCount() != null) {
-			reserveBuilder.childCount(input.getChildCount());
+		if (input.childCount() != null) {
+			reserveBuilder.childCount(input.childCount());
 		}
 		Reserve reserve = reserveBuilder.build();
 
 		TourInfo info = reserve.getTourInfo();
-		PriceCalculateOutput price = priceCalculateService.calculatePrice(info.getBasePrice(), input.getAdultCount(),
-				input.getChildCount());
+		PriceCalculateOutput price = priceCalculateService.calculatePrice(info.getBasePrice(), input.adultCount(),
+				input.childCount());
 
 		reserve.setSumPrice(price.getSumPrice());
 		reserveMapper.update(reserve);
 
-		ReservationUpdateOutput output = new ReservationUpdateOutput();
-		output.setReserve(reserve);
-		output.setPriceCalculateOutput(price);
-		output.setPaymentTimeLimit(info.getPaymentLimit());
+		return reservationUpdateOutput().priceCalculateOutput(price)
+			.reserve(reserve)
+			.paymentTimeLimit(info.getPaymentLimit())
+			.build();
+	}
 
-		return output;
+	@Builder(style = BuilderStyle.STAGED)
+	public record ReserveTourInput(String tourCode,
+
+			Integer adultCount,
+
+			Integer childCount,
+
+			String remarks,
+
+			Customer customer) {
+	}
+
+	@Builder(style = BuilderStyle.STAGED)
+	public record ReserveTourOutput(PriceCalculateOutput priceCalculateOutput,
+
+			Reserve reserve,
+
+			Customer customer,
+
+			TourInfo tourInfo,
+
+			LocalDate paymentTimeLimit) {
+
+	}
+
+	@Builder(style = BuilderStyle.STAGED)
+	public record ReservationUpdateInput(String reserveNo,
+
+			Integer adultCount,
+
+			Integer childCount) {
+
+	}
+
+	@Builder(style = BuilderStyle.STAGED)
+	public record ReservationUpdateOutput(PriceCalculateOutput priceCalculateOutput,
+
+			Reserve reserve,
+
+			LocalDate paymentTimeLimit) {
+
 	}
 
 }

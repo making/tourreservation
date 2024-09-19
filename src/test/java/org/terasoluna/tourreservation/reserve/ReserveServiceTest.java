@@ -136,11 +136,13 @@ class ReserveServiceTest {
 		// <=
 		// 10
 
-		ReserveTourInput input = new ReserveTourInput();
-		input.setAdultCount(1);
-		input.setChildCount(2);
-		input.setTourCode("01");
-		input.setRemarks("aa");
+		ReserveService.ReserveTourInput input = ReserveTourInputBuilder.reserveTourInput()
+			.tourCode("01")
+			.adultCount(1)
+			.childCount(2)
+			.remarks("aa")
+			.customer(null)
+			.build();
 
 		PriceCalculateOutput priceCalculateOutput = new PriceCalculateOutput();
 		priceCalculateOutput.setSumPrice(100000);
@@ -149,13 +151,13 @@ class ReserveServiceTest {
 		when(priceCalculateSerivce.calculatePrice(10000, 1, 2)).thenReturn(priceCalculateOutput);
 
 		// normal
-		ReserveTourOutput output = reserveService.reserve(input);
+		ReserveService.ReserveTourOutput output = reserveService.reserve(input);
 
 		ArgumentCaptor<Reserve> capture = ArgumentCaptor.forClass(Reserve.class);
 		verify(reserveMapper, atLeast(1)).insert(capture.capture());
 
 		Reserve r = capture.getValue();
-		assertThat(output.getReserve()).isEqualTo(r);
+		assertThat(output.reserve()).isEqualTo(r);
 		assertThat(r.getAdultCount()).isEqualTo(1);
 		assertThat(r.getChildCount()).isEqualTo(2);
 		assertThat(r.getSumPrice()).isEqualTo(100000);
@@ -189,12 +191,13 @@ class ReserveServiceTest {
 			// <=
 			// 10
 
-			ReserveTourInput input = new ReserveTourInput();
-			input.setAdultCount(1);
-			input.setChildCount(2);
-			input.setTourCode("01");
-			input.setRemarks("aa");
-
+			ReserveService.ReserveTourInput input = ReserveTourInputBuilder.reserveTourInput()
+				.tourCode("01")
+				.adultCount(1)
+				.childCount(2)
+				.remarks("aa")
+				.customer(null)
+				.build();
 			PriceCalculateOutput priceCalculateOutput = new PriceCalculateOutput();
 			priceCalculateOutput.setSumPrice(100000);
 			priceCalculateOutput.setAdultCount(1);
@@ -235,11 +238,13 @@ class ReserveServiceTest {
 			// >
 			// 10
 
-			ReserveTourInput input = new ReserveTourInput();
-			input.setAdultCount(1);
-			input.setChildCount(2);
-			input.setTourCode("01");
-			input.setRemarks("aa");
+			ReserveService.ReserveTourInput input = ReserveTourInputBuilder.reserveTourInput()
+				.tourCode("01")
+				.adultCount(1)
+				.childCount(2)
+				.remarks("aa")
+				.customer(null)
+				.build();
 
 			PriceCalculateOutput priceCalculateOutput = new PriceCalculateOutput();
 			priceCalculateOutput.setSumPrice(100000);
@@ -395,10 +400,11 @@ class ReserveServiceTest {
 		priceCalculateOutput.setChildCount(2);
 		when(priceCalculateSerivce.calculatePrice(10000, 1, 2)).thenReturn(priceCalculateOutput);
 
-		ReservationUpdateInput input = new ReservationUpdateInput();
-		input.setReserveNo("foo");
-		input.setAdultCount(1);
-		input.setChildCount(2);
+		ReserveService.ReservationUpdateInput input = ReservationUpdateInputBuilder.reservationUpdateInput()
+			.reserveNo("foo")
+			.adultCount(1)
+			.childCount(2)
+			.build();
 
 		Reserve reserve = new Reserve();
 		TourInfo tour = new TourInfo("aaa");
@@ -411,7 +417,7 @@ class ReserveServiceTest {
 		when(reserveMapper.findById("foo")).thenReturn(Optional.of(reserve));
 		when(tourInfoSharedService.findOneWithDetails("aaa")).thenReturn(tour);
 		// run
-		ReservationUpdateOutput output = reserveService.update(input);
+		ReserveService.ReservationUpdateOutput output = reserveService.update(input);
 		assertThat(output).isEqualTo(output);
 	}
 

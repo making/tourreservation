@@ -19,15 +19,15 @@ import org.jilt.Builder;
 import org.jilt.BuilderStyle;
 import org.terasoluna.tourreservation.auth.ReservationUserDetails;
 import org.terasoluna.tourreservation.common.BusinessException;
+import org.terasoluna.tourreservation.customer.Customer;
 import org.terasoluna.tourreservation.reserve.ReserveService;
-import org.terasoluna.tourreservation.reserve.ReserveTourInput;
 import org.terasoluna.tourreservation.reserve.ReserveTourInputBuilder;
-import org.terasoluna.tourreservation.reserve.ReserveTourOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateOutput;
 import org.terasoluna.tourreservation.tour.PriceCalculateSharedService;
 import org.terasoluna.tourreservation.tour.TourInfo;
 import org.terasoluna.tourreservation.tour.TourInfoSharedService;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -55,18 +55,15 @@ public class ReserveTourHelper {
 	 */
 	public TourDetailOutput findTourDetail(ReservationUserDetails userDetails, String tourCode, ReserveTourForm form) {
 		TourInfo tourInfo = tourInfoSharedService.findOneWithDetails(tourCode);
-
 		PriceCalculateOutput priceCalculateOutput = priceCalculateService.calculatePrice(tourInfo.getBasePrice(),
 				form.getAdultCount(), form.getChildCount());
-
-		TourDetailOutput output = new TourDetailOutput();
-		output.setTourInfo(tourInfo);
-		output.setPriceCalculateOutput(priceCalculateOutput);
-
+		TourDetailOutputBuilders.Optionals builder = TourDetailOutputBuilder.tourDetailOutput()
+			.tourInfo(tourInfo)
+			.priceCalculateOutput(priceCalculateOutput);
 		if (userDetails != null) {
-			output.setCustomer(userDetails.getCustomer());
+			builder.customer(userDetails.getCustomer());
 		}
-		return output;
+		return builder.build();
 	}
 
 	/**
@@ -76,9 +73,9 @@ public class ReserveTourHelper {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public ReserveTourOutput reserve(ReservationUserDetails userDetails, String tourCode,
+	public ReserveService.ReserveTourOutput reserve(ReservationUserDetails userDetails, String tourCode,
 			ReserveTourForm tourReserveForm) throws BusinessException {
-		ReserveTourInput input = ReserveTourInputBuilder.reserveTourInput()
+		ReserveService.ReserveTourInput input = ReserveTourInputBuilder.reserveTourInput()
 			.tourCode(tourCode)
 			.adultCount(tourReserveForm.getAdultCount())
 			.childCount(tourReserveForm.getChildCount())
@@ -86,6 +83,12 @@ public class ReserveTourHelper {
 			.customer(userDetails.getCustomer())
 			.build();
 		return reserveService.reserve(input);
+	}
+
+	@Builder(style = BuilderStyle.STAGED)
+	public record TourDetailOutput(TourInfo tourInfo, PriceCalculateOutput priceCalculateOutput,
+			@Nullable Customer customer) {
+
 	}
 
 }

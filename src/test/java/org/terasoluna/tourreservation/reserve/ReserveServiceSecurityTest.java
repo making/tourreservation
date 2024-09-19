@@ -54,6 +54,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.terasoluna.tourreservation.reserve.ReservationUpdateInputBuilder.reservationUpdateInput;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Testcontainers(disabledWithoutDocker = true)
@@ -158,20 +159,20 @@ class ReserveServiceSecurityTest {
 		}
 
 		// test
-		ReservationUpdateOutput output;
+		ReserveService.ReservationUpdateOutput output;
 		{
-			ReservationUpdateInput input = new ReservationUpdateInput();
-			input.setReserveNo("R000000001");
-			input.setAdultCount(1);
-			input.setChildCount(1);
+			ReserveService.ReservationUpdateInput input = reservationUpdateInput().reserveNo("R000000001")
+				.adultCount(1)
+				.childCount(1)
+				.build();
 			output = reserveService.update(input);
 		}
 
 		// assert
 		{
 			verify(mockReserveMapper, times(1)).update(any(Reserve.class));
-			assertThat(output.getReserve().getReserveNo()).isEqualTo("R000000001");
-			assertThat(output.getReserve().getCustomer().getCustomerCode()).isEqualTo(CUSTOMER_A);
+			assertThat(output.reserve().getReserveNo()).isEqualTo("R000000001");
+			assertThat(output.reserve().getCustomer().getCustomerCode()).isEqualTo(CUSTOMER_A);
 		}
 
 	}
@@ -187,10 +188,10 @@ class ReserveServiceSecurityTest {
 
 		// test
 		{
-			ReservationUpdateInput input = new ReservationUpdateInput();
-			input.setAdultCount(1);
-			input.setChildCount(1);
-			input.setReserveNo("R000000001");
+			ReserveService.ReservationUpdateInput input = reservationUpdateInput().reserveNo("R000000001")
+				.adultCount(1)
+				.childCount(1)
+				.build();
 			try {
 				reserveService.update(input);
 				fail("");

@@ -101,16 +101,16 @@ class ManageReservationHelperTest {
 		when(tourInfoSharedService.isOverPaymentLimit(tour1)).thenReturn(false);
 		when(tourInfoSharedService.isOverPaymentLimit(tour2)).thenReturn(true);
 
-		List<ReserveRowOutput> result = manageReservationFacade.list(userDetails);
+		List<ManageReservationHelper.ReserveRowOutput> result = manageReservationFacade.list(userDetails);
 		assertThat(result).isNotNull().hasSize(2);
-		ReserveRowOutput o1 = result.getFirst();
-		assertThat(o1.getLimitExceeding()).isFalse();
-		assertThat(o1.getReserve()).isEqualTo(reserve1);
-		assertThat(o1.getTourDays()).isEqualTo("2");
-		ReserveRowOutput o2 = result.get(1);
-		assertThat(o2.getLimitExceeding()).isTrue();
-		assertThat(o2.getReserve()).isEqualTo(reserve2);
-		assertThat(o2.getTourDays()).isEqualTo("4");
+		ManageReservationHelper.ReserveRowOutput o1 = result.getFirst();
+		assertThat(o1.limitExceeding()).isFalse();
+		assertThat(o1.reserve()).isEqualTo(reserve1);
+		assertThat(o1.tourDays()).isEqualTo("2");
+		ManageReservationHelper.ReserveRowOutput o2 = result.get(1);
+		assertThat(o2.limitExceeding()).isTrue();
+		assertThat(o2.reserve()).isEqualTo(reserve2);
+		assertThat(o2.tourDays()).isEqualTo("4");
 
 	}
 
