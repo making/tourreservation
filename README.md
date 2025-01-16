@@ -10,7 +10,7 @@
 
 ```
 docker compose up -d
-java -jar ./target/tourreservation-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:postgresql://localhost:5432/mydatabase --spring.datasource.username=myuser --spring.datasource.password=secret
+java -jar ./target/tourreservation-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:postgresql://localhost:5432/mydatabase --spring.datasource.username=myuser --spring.datasource.password=secret --management.tracing.enabled=true
 ```
 
 Go to http://localhost:8080
