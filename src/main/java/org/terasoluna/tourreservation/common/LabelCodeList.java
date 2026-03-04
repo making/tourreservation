@@ -6,12 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface LabelCodeList {
 
-	@Nullable
-	default String getLabelFromCode(String code) {
+	default @Nullable String getLabelFromCode(String code) {
 		for (LabelCode labelCode : this.labelCodes()) {
 			if (labelCode.code().equals(code)) {
 				return labelCode.label();
@@ -20,8 +19,7 @@ public interface LabelCodeList {
 		return null;
 	}
 
-	@Nullable
-	default String getCodeFromLabel(String label) {
+	default @Nullable String getCodeFromLabel(String label) {
 		for (LabelCode labelCode : this.labelCodes()) {
 			if (labelCode.label().equals(label)) {
 				return labelCode.code();

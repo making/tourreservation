@@ -15,10 +15,10 @@
  */
 package org.terasoluna.tourreservation.domain.service.reserve;
 
+import org.jspecify.annotations.Nullable;
 import org.terasoluna.tourreservation.domain.model.Reserve;
 import org.terasoluna.tourreservation.domain.repository.reserve.ReserveRepository;
 
-import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +34,7 @@ public class AuthorizedReserveSharedService {
 	}
 
 	@PostAuthorize("returnObject == null or returnObject.customer.customerCode == principal.customer.customerCode")
-	@Nullable
-	public Reserve findOne(String reserveNo) {
+	public @Nullable Reserve findOne(String reserveNo) {
 		return reserveRepository.findById(reserveNo).orElse(null);
 	}
 

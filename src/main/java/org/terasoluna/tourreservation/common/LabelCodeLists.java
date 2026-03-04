@@ -8,9 +8,9 @@ import javax.sql.DataSource;
 
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.lang.Nullable;
 
 public final class LabelCodeLists {
 
